@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Welcome to Astro.">
+  <main class="container">
+    <section class="content">
+      <img src="/images/logo.png" alt="logo" class="image-logo" />
+      <p class="description">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur
+        architecto, in voluptate, modi earum libero nesciunt consequuntur
+        accusamus vel voluptatibus neque labore ex cumque asperiores ea qui
+        iure. Ea, nihil.
+      </p>
+      <p class="description">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur
+        architecto, in voluptate, modi earum libero nesciunt consequuntur
+        accusamus vel voluptatibus neque labore ex cumque asperiores ea qui
+        iure. Ea, nihil.
+      </p>
+      <p class="description">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur
+        architecto, in voluptate, modi earum libero nesciunt consequuntur
+        accusamus vel voluptatibus neque labore ex cumque asperiores ea qui
+        iure. Ea, nihil.
+      </p>
+    </section>
+
+    <section class="content-image">
+      <img src="/images/flowers.png" alt="flowers" class="image-flowers" />
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .container {
+    display: flex;
+    justify-content: space-between;
+    background-color: red;
+  }
+
+  .content {
+    width: 70%;
+
+    background-color: blue;
+  }
+
+  .content-image {
+    width: 30%;
+    align-self: flex-start;
+  }
+  .image-logo {
+    width: 20%;
+    margin-left: 20px;
+  }
+
+  .image-flowers {
+    width: 100%;
+    /* height: 100%; */
+  }
+
+  .description {
+    color: #fff;
+    margin-left: 5rem;
+    width: 100vh;
+  }
+</style>

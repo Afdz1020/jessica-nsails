@@ -61,7 +61,10 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
         title="Retoques"
       />
 
-      <h3>Press On</h3>
+      <div class="press-on">
+        <h3>Press On</h3>
+        <p class="price-press-on">$80.000</p>
+      </div>
 
       <Prices
         prices={tradicional.prices}
@@ -121,9 +124,18 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
 
   .container-prices .title-price {
     text-align: center;
-    margin-bottom: 10px;
+    margin-top: 13px;
     font-size: 2.5rem;
     letter-spacing: 5px;
+  }
+
+  .container-prices .press-on {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .press-on .price-press-on {
+    margin-right: 42.6rem;
   }
 
   @media screen and (max-width: 768px) {
@@ -144,12 +156,15 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
       text-align: center;
       margin-bottom: 5px;
       margin-left: 9rem;
-      background-color: brown;
     }
     .container-prices .title-price {
-      background-color: blue;
       text-align: center;
       margin-left: 150px;
+      margin-top: 10px;
+    }
+
+    .press-on .price-press-on {
+      margin-right: -4.4rem;
     }
   }
 </style>

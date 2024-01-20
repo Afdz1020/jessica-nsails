@@ -1,6 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Header from '@/components/Header.astro';
+import Prices from '@/components/Prices.astro';
+import { spaServices } from '@/utils/constants';
+
+const { semipermanente, acrilico, retoques, tradicional } = spaServices;
 ---
 
 <Layout title="JNSails">
@@ -34,14 +38,44 @@ import Header from '@/components/Header.astro';
       </div>
     </section>
 
-    <img src="/images/flowers.png" alt="flowers" class="image-flowers" />
+    <!-- <img src="/images/flowers.png" alt="flowers" class="image-flowers" /> -->
+
+    <section class="container-prices">
+      <h4 class="title">Lista de</h4>
+      <h2 class="title-price">Precios</h2>
+      <Prices
+        prices={semipermanente.prices}
+        descriptions={semipermanente.descriptions}
+        title="Semipermanente"
+      />
+
+      <Prices
+        prices={acrilico.prices}
+        descriptions={acrilico.descriptions}
+        title="Acrílico"
+      />
+
+      <Prices
+        prices={retoques.prices}
+        descriptions={retoques.descriptions}
+        title="Retoques"
+      />
+
+      <h3>Press On</h3>
+
+      <Prices
+        prices={tradicional.prices}
+        descriptions={tradicional.descriptions}
+        title="tradicional"
+      />
+    </section>
   </main>
 </Layout>
 
 <style>
   .container {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
   }
 
   .content {
@@ -56,15 +90,11 @@ import Header from '@/components/Header.astro';
   .container-nails .image-nails {
     width: 20%;
     height: 10%;
-    margin-right: 70px;
+    margin-right: 40px;
   }
 
   .content-image {
     width: 30%;
-  }
-  .image-logo {
-    width: 20%;
-    margin-left: 20px;
   }
 
   .image-flowers {
@@ -74,7 +104,52 @@ import Header from '@/components/Header.astro';
   }
 
   .description {
-    color: #fff;
     width: 100vh;
+  }
+
+  .container-prices {
+    width: 90%;
+    margin-top: 50px;
+    margin-left: 5rem;
+  }
+
+  .container-prices .title {
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+  }
+
+  .container-prices .title-price {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+    letter-spacing: 5px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .container-nails {
+      width: 70vh;
+      margin-top: 100px;
+    }
+    .container-nails .image-nails {
+      width: 20vh;
+      margin-right: 10px;
+      height: 30vh;
+    }
+    .description {
+      width: 65vh;
+    }
+
+    .container-prices .title {
+      text-align: center;
+      margin-bottom: 5px;
+      margin-left: 9rem;
+      background-color: brown;
+    }
+    .container-prices .title-price {
+      background-color: blue;
+      text-align: center;
+      margin-left: 150px;
+    }
   }
 </style>

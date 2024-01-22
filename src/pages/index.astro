@@ -1,6 +1,5 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Header from '@/components/Header.astro';
 import Prices from '@/components/Prices.astro';
 import { spaServices } from '@/utils/constants';
 
@@ -8,8 +7,6 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
 ---
 
 <Layout title="JNSails">
-  <Header />
-
   <main class="container">
     <section class="content">
       <p class="description">
@@ -31,11 +28,28 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
         iure. Ea, nihil.
       </p>
 
-      <div class="container-nails">
-        <img src="images/2.jpg" alt="flowers" class="image-nails" />
-        <img src="images/2.jpg" alt="flowers" class="image-nails" />
-        <img src="images/3.jpg" alt="flowers" class="image-nails" />
-      </div>
+      <section class="container-nails-images">
+        <div class="gallery">
+          <div class="img image-1">
+            <img src="images/2.jpg" alt="nails" />
+          </div>
+          <div class="img image-2">
+            <img src="images/3.jpg" alt="nails" />
+          </div>
+          <div class="img image-3">
+            <img src="images/2.jpg" alt="nails" />
+          </div>
+          <div class="img image-4">
+            <img src="images/3.jpg" alt="nails" />
+          </div>
+          <div class="img image-5">
+            <img src="images/2.jpg" alt="nails" />
+          </div>
+          <div class="img image-6">
+            <img src="images/3.jpg" alt="nails" />
+          </div>
+        </div>
+      </section>
     </section>
 
     <section class="container-prices">
@@ -59,11 +73,6 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
         title="Retoques"
       />
 
-      <div class="press-on">
-        <h3>Press On</h3>
-        <p class="price-press-on">$80.000</p>
-      </div>
-
       <Prices
         prices={tradicional.prices}
         descriptions={tradicional.descriptions}
@@ -83,6 +92,8 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
   .container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .content {
@@ -90,8 +101,25 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
     margin-left: 5rem;
   }
 
-  .container-nails {
-    display: flex;
+  .container-nails-images .gallery {
+    width: 100%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
+  }
+
+  .container-nails-images .gallery .img {
+    margin-top: 15px;
+    width: 95%;
+  }
+  .gallery .img img {
+    width: 95%;
+  }
+
+  .img img:hover {
+    transform: scale(1.3);
   }
 
   .container .footer {
@@ -105,12 +133,6 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
   .container .footer p {
     font-size: 1.5rem;
     margin-top: -10px;
-  }
-
-  .container-nails .image-nails {
-    width: 40%;
-    height: 10%;
-    margin-right: 40px;
   }
 
   .content-image {
@@ -128,9 +150,14 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
   }
 
   .container-prices {
-    width: 90%;
-    margin-top: 50px;
-    padding-left: 20rem;
+    width: 80%;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid #fff;
   }
 
   .container-prices .title {
@@ -155,33 +182,54 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
     margin-right: 22.6rem;
   }
 
+  @media screen (max-width: 100px) {
+    .container-nails-images .gallery {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  @media screen (max-width: 520px) {
+    .container-nails-images .gallery {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen (max-width: 1024px) {
+    .container-nails-images .gallery {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
   @media screen and (max-width: 768px) {
-    .container-nails {
+    .container-nails-images {
       width: 70vh;
       margin-top: 100px;
     }
-    .container-nails .image-nails {
-      width: 20vh;
-      margin-right: 10px;
-      height: 30vh;
+
+    .container-nails-images .gallery {
+      grid-template-columns: repeat(3, 1fr);
     }
+
     .description {
       width: 65vh;
     }
 
     .container-prices {
-      padding-left: 5rem;
+      width: 75vh;
+      padding-left: 100px;
+      margin-left: 500px;
+      margin-right: 200px;
     }
 
     .container-prices .title {
       text-align: center;
       margin-bottom: 5px;
-      margin-left: 9rem;
+      margin-right: 80px;
     }
     .container-prices .title-price {
       text-align: center;
-      margin-left: 150px;
       margin-top: 10px;
+      margin-right: 80px;
     }
     .press-on h3 {
       width: 200px;

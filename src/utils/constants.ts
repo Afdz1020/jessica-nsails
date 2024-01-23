@@ -15,4 +15,14 @@ export const spaServices = {
     descriptions: ['Manicura', 'Pedicura'],
     prices: ['$20.000', '$25.000'],
   },
+
+  pressOn: {
+    descriptions: ['Press On'],
+    prices: ['$80.000'],
+  },
+
+  tiempos: {
+    descriptions: ['Semi-permanente', 'Acrilico', 'Press On'],
+    prices: ['7 Dias', '5 Dias', ' 5 Dias'],
+  },
 };

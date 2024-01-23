@@ -3,10 +3,11 @@ import Layout from '@/layouts/Layout.astro';
 import Prices from '@/components/Prices.astro';
 import { spaServices } from '@/utils/constants';
 
-const { semipermanente, acrilico, retoques, tradicional } = spaServices;
+const { semipermanente, acrilico, retoques, tradicional, pressOn } =
+  spaServices;
 ---
 
-<Layout title="JNSails">
+<Layout title="JDNails">
   <main class="container">
     <section class="content">
       <p class="description">
@@ -74,17 +75,17 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
       />
 
       <Prices
+        prices={pressOn.prices}
+        descriptions={pressOn.descriptions}
+        title="Press On"
+      />
+
+      <Prices
         prices={tradicional.prices}
         descriptions={tradicional.descriptions}
         title="tradicional"
       />
     </section>
-
-    <footer class="footer">
-      <p>321-225-7761</p>
-      <p>Calle 32a # 45-01</p>
-      <p>San Pio - Itagui</p>
-    </footer>
   </main>
 </Layout>
 
@@ -119,7 +120,7 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
   }
 
   .img img:hover {
-    transform: scale(1.3);
+    transform: scale(1.1);
   }
 
   .container .footer {
@@ -156,8 +157,10 @@ const { semipermanente, acrilico, retoques, tradicional } = spaServices;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 5px;
     border: 1px solid #fff;
+    outline: 1px solid rgb(223, 18, 154);
+    outline-offset: -13px;
   }
 
   .container-prices .title {

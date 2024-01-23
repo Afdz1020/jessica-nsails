@@ -9,7 +9,7 @@ const { title, descriptions, prices } = Astro.props;
 ---
 
 <div>
-  <h3 class="title-price">{title}</h3>
+  <h3>{title}</h3>
   <div class="container-prices-description">
     <ul class="types-services">
       {descriptions.map((description) => <li>{description}</li>)}

@@ -1,0 +1,60 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  src: string;
+  position?: 'left' | 'right';
+}
+
+const { title, description, src, position = 'left' } = Astro.props;
+---
+
+<div class="card mb-3">
+  {
+    position === 'left' ? (
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img
+            src={src}
+            class="img-fluid rounded-start img__description"
+            alt="Semipermanente"
+          />
+        </div>
+        <div class="col-md-8 card-nails-description">
+          <div class="card-body">
+            <h5 class="card-title">{title}</h5>
+            <p class="card-text">{description}</p>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div class="row g-0">
+        <div class="col-md-8 card-nails-description">
+          <div class="card-body">
+            <h5 class="card-title">{title}</h5>
+            <p class="card-text">{description}</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <img
+            src={src}
+            class="img-fluid rounded-start img__description"
+            alt="Acrilico"
+          />
+        </div>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .card-nails-description {
+    background-color: #323232;
+  }
+
+  .img__description {
+    height: 40vh;
+    width: 100%;
+  }
+</style>

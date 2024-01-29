@@ -1,0 +1,46 @@
+---
+interface Props {
+  images: string[];
+}
+const { images } = Astro.props;
+---
+
+<div id="carouselNails" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {
+      images.map((image, index) => {
+        const classItem =
+          index === 0 ? 'carousel-item active' : 'carousel-item';
+        return (
+          <div class={classItem}>
+            <img src={image} class="d-block w-100 image__banner" alt="..." />
+          </div>
+        );
+      })
+    }
+  </div>
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#carouselNails"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#carouselNails"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<style>
+  .image__banner {
+    height: 90vb;
+  }
+</style>

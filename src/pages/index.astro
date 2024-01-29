@@ -2,183 +2,74 @@
 import Layout from '@/layouts/Layout.astro';
 import Prices from '@/components/Prices.astro';
 import { spaServices } from '@/utils/constants';
+import Carousel from '@/components/Carousel.astro';
+import Card from '@/components/Card.astro';
+import Instagram from '@/components/icons/Instagram.astro';
+import Tiktok from '@/components/icons/Tiktok.astro';
+import Whatsapp from '@/components/icons/Whatsapp.astro';
 
 const { semipermanente, acrilico, retoques, tradicional, pressOn } =
   spaServices;
+
+const images = [
+  'images/banner/banner1.jpeg',
+  'images/banner/banner2.jpeg',
+  'images/banner/banner3.jpeg',
+];
 ---
 
 <Layout title="JDNails">
   <main class="container">
-    <section class="content">
-      <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img
-              src="images/banner/banner1.jpeg"
-              class="d-block w-100 image__banner"
-              alt="..."
-            />
-          </div>
-          <div class="carousel-item">
-            <img
-              src="images/banner/banner2.jpeg"
-              class="d-block w-100 image__banner"
-              alt="..."
-            />
-          </div>
-          <div class="carousel-item">
-            <img
-              src="images/banner/banner3.jpeg"
-              class="d-block w-100 image__banner"
-              alt="..."
-            />
-          </div>
-        </div>
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExample"
-          data-bs-slide="prev"
-        >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExample"
-          data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
+    <section class="banner__nails">
+      <Carousel images={images} />
+    </section>
 
-      <section class="container-nails-images">
-        <div class="card mb-3">
-          <div class="row g-0">
-            <div class="col-md-4">
-              <img
-                src="images/1.jpg"
-                class="img-fluid rounded-start img__description"
-                alt="..."
-              />
-            </div>
-            <div class="col-md-8 card-nails-description">
-              <div class="card-body">
-                <h5 class="card-title">Semipermanente</h5>
-                <p class="card-text">
-                  This is a wider card with supporting text below as a natural
-                  lead-in to additional content. This content is a little bit
-                  longer.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="row g-0">
-            <div class="col-md-8 card-nails-description">
-              <div class="card-body">
-                <h5 class="card-title">Acrilico</h5>
-                <p class="card-text">
-                  This is a wider card with supporting text below as a natural
-                  lead-in to additional content. This content is a little bit
-                  longer.
-                </p>
-              </div>
-            </div>
-
-            <div class="col-md-4">
-              <img
-                src="images/2.jpg"
-                class="img-fluid rounded-start img__description"
-                alt="..."
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="row g-0">
-            <div class="col-md-4">
-              <img
-                src="images/3.jpg"
-                class="img-fluid rounded-start img__description"
-                alt="..."
-              />
-            </div>
-            <div class="col-md-8 card-nails-description">
-              <div class="card-body">
-                <h5 class="card-title">Retoques</h5>
-                <p class="card-text">
-                  This is a wider card with supporting text below as a natural
-                  lead-in to additional content. This content is a little bit
-                  longer.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card mb-3">
-          <div class="row g-0">
-            <div class="col-md-8 card-nails-description">
-              <div class="card-body">
-                <h5 class="card-title">Prees On</h5>
-                <p class="card-text">
-                  This is a wider card with supporting text below as a natural
-                  lead-in to additional content. This content is a little bit
-                  longer.
-                </p>
-              </div>
-            </div>
-
-            <div class="col-md-4">
-              <img
-                src="images/banner/banner8.jpeg"
-                class="img-fluid rounded-start img__description"
-                alt="..."
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!--<section class="container-prices">
-      <h4 class="title">Lista de</h4>
-      <h2 class="title-price">Precios</h2>
-      <Prices
-        prices={semipermanente.prices}
-        descriptions={semipermanente.descriptions}
+    <section class="container__nails__services" id="servicios">
+      <Card
         title="Semipermanente"
+        description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
+        src="images/1.jpg"
       />
 
-      <Prices
-        prices={acrilico.prices}
-        descriptions={acrilico.descriptions}
-        title="Acrílico"
+      <Card
+        title="Acrilico"
+        description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
+        src="images/2.jpg"
+        position="right"
       />
 
-      <Prices
-        prices={retoques.prices}
-        descriptions={retoques.descriptions}
+      <Card
         title="Retoques"
+        description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
+        src="images/3.jpg"
       />
 
-      <Prices
-        prices={pressOn.prices}
-        descriptions={pressOn.descriptions}
+      <Card
         title="Press On"
+        description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
+        src="images/banner/banner8.jpeg"
+        position="right"
       />
+    </section>
 
-      <Prices
-        prices={tradicional.prices}
-        descriptions={tradicional.descriptions}
-        title="tradicional"
-      />
-    </section> -->
+    <section class="container__social">
+      <a href="https://www.instagram.com/jessicadiaz_nailsart/" target="_blank">
+        <Instagram class="icon__social" />
+      </a>
+
+      <a
+        href="https://www.tiktok.com/@jessicadiazzapata8?lang=es"
+        target="_blank"
+      >
+        <Tiktok class="icon__social" />
+      </a>
+
+      <a
+        href="https://api.whatsapp.com/send?phone=+573212257761&text=Bienvenido%20a%20Jessica%20Diaz%20Nails%20Spa,%20¿en%20qué%20te%20podemos%20ayudar?"
+        target="_blank"
+      >
+        <Whatsapp class="icon__social" />
+      </a>
     </section>
   </main>
 
@@ -188,35 +79,28 @@ const { semipermanente, acrilico, retoques, tradicional, pressOn } =
       flex-direction: column;
       justify-content: center;
       align-items: center;
-    }
-
-    .content {
       width: 100%;
     }
 
-    .container-nails-images {
+    .container .container__social {
+      background-color: #1b1414;
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .icon__social {
+      width: 100px;
+      height: 80px;
+      color: #fff;
+    }
+
+    .banner__nails {
+      width: 100%;
+    }
+
+    .container__nails__services {
+      width: 100%;
       margin-top: 30px;
-    }
-
-    .card-nails-description {
-      background-color: #323232;
-    }
-    .img__description {
-      height: 40vh;
-      width: 100%;
-    }
-
-    .image__banner {
-      height: 90vb;
-    }
-
-    .container-nails-images .gallery {
-      width: 100%;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      column-gap: 0.5rem;
-      row-gap: 0.5rem;
     }
 
     .container-prices {
@@ -232,63 +116,7 @@ const { semipermanente, acrilico, retoques, tradicional, pressOn } =
       outline-offset: -13px;
     }
 
-    .container-prices .title {
-      text-align: center;
-      margin-bottom: 10px;
-      letter-spacing: 3px;
-    }
-
-    .container-prices .title-price {
-      text-align: center;
-      margin-top: 13px;
-      font-size: 2.5rem;
-      letter-spacing: 5px;
-    }
-
-    .container-prices .press-on {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .press-on .price-press-on {
-      margin-right: 22.6rem;
-    }
-
     @media screen and (max-width: 768px) {
-      .container-nails-images {
-        width: 70vh;
-        margin-top: 100px;
-      }
-
-      .container-nails-images .gallery {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .description {
-        width: 65vh;
-      }
-
-      .container-prices {
-        width: 75vh;
-        padding-left: 100px;
-        margin-left: 500px;
-        margin-right: 200px;
-      }
-
-      .container-prices .title {
-        text-align: center;
-        margin-bottom: 5px;
-        margin-right: 80px;
-      }
-      .container-prices .title-price {
-        text-align: center;
-        margin-top: 10px;
-        margin-right: 80px;
-      }
-      .press-on h3 {
-        width: 200px;
-      }
-
       .press-on .price-press-on {
         margin-left: 19.5rem;
       }

@@ -10,50 +10,143 @@ const { semipermanente, acrilico, retoques, tradicional, pressOn } =
 <Layout title="JDNails">
   <main class="container">
     <section class="content">
-      <p class="description">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur
-        architecto, in voluptate, modi earum libero nesciunt consequuntur
-        accusamus vel voluptatibus neque labore ex cumque asperiores ea qui
-        iure. Ea, nihil.
-      </p>
-      <p class="description">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur
-        architecto, in voluptate, modi earum libero nesciunt consequuntur
-        accusamus vel voluptatibus neque labore ex cumque asperiores ea qui
-        iure. Ea, nihil.
-      </p>
-      <p class="description">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consectetur
-        architecto, in voluptate, modi earum libero nesciunt consequuntur
-        accusamus vel voluptatibus neque labore ex cumque asperiores ea qui
-        iure. Ea, nihil.
-      </p>
+      <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img
+              src="images/banner/banner1.jpeg"
+              class="d-block w-100 image__banner"
+              alt="..."
+            />
+          </div>
+          <div class="carousel-item">
+            <img
+              src="images/banner/banner2.jpeg"
+              class="d-block w-100 image__banner"
+              alt="..."
+            />
+          </div>
+          <div class="carousel-item">
+            <img
+              src="images/banner/banner3.jpeg"
+              class="d-block w-100 image__banner"
+              alt="..."
+            />
+          </div>
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExample"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExample"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
 
       <section class="container-nails-images">
-        <div class="gallery">
-          <div class="img image-1">
-            <img src="images/2.jpg" alt="nails" />
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img
+                src="images/1.jpg"
+                class="img-fluid rounded-start img__description"
+                alt="..."
+              />
+            </div>
+            <div class="col-md-8 card-nails-description">
+              <div class="card-body">
+                <h5 class="card-title">Semipermanente</h5>
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="img image-2">
-            <img src="images/3.jpg" alt="nails" />
+        </div>
+
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-8 card-nails-description">
+              <div class="card-body">
+                <h5 class="card-title">Acrilico</h5>
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <img
+                src="images/2.jpg"
+                class="img-fluid rounded-start img__description"
+                alt="..."
+              />
+            </div>
           </div>
-          <div class="img image-3">
-            <img src="images/2.jpg" alt="nails" />
+        </div>
+
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <img
+                src="images/3.jpg"
+                class="img-fluid rounded-start img__description"
+                alt="..."
+              />
+            </div>
+            <div class="col-md-8 card-nails-description">
+              <div class="card-body">
+                <h5 class="card-title">Retoques</h5>
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="img image-4">
-            <img src="images/3.jpg" alt="nails" />
-          </div>
-          <div class="img image-5">
-            <img src="images/2.jpg" alt="nails" />
-          </div>
-          <div class="img image-6">
-            <img src="images/3.jpg" alt="nails" />
+        </div>
+
+        <div class="card mb-3">
+          <div class="row g-0">
+            <div class="col-md-8 card-nails-description">
+              <div class="card-body">
+                <h5 class="card-title">Prees On</h5>
+                <p class="card-text">
+                  This is a wider card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <img
+                src="images/banner/banner8.jpeg"
+                class="img-fluid rounded-start img__description"
+                alt="..."
+              />
+            </div>
           </div>
         </div>
       </section>
-    </section>
 
-    <section class="container-prices">
+      <!--<section class="container-prices">
       <h4 class="title">Lista de</h4>
       <h2 class="title-price">Precios</h2>
       <Prices
@@ -85,161 +178,120 @@ const { semipermanente, acrilico, retoques, tradicional, pressOn } =
         descriptions={tradicional.descriptions}
         title="tradicional"
       />
+    </section> -->
     </section>
   </main>
-</Layout>
 
-<style>
-  .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .content {
-    width: 90%;
-    margin-left: 5rem;
-  }
-
-  .container-nails-images .gallery {
-    width: 100%;
-    margin: auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: 0.5rem;
-    row-gap: 0.5rem;
-  }
-
-  .container-nails-images .gallery .img {
-    margin-top: 15px;
-    width: 95%;
-  }
-  .gallery .img img {
-    width: 95%;
-  }
-
-  .img img:hover {
-    transform: scale(1.1);
-  }
-
-  .container .footer {
-    width: 70%;
-    margin-left: 5rem;
-    display: flex;
-    flex-direction: column;
-    margin-top: 120px;
-  }
-
-  .container .footer p {
-    font-size: 1.5rem;
-    margin-top: -10px;
-  }
-
-  .content-image {
-    width: 30%;
-  }
-
-  .image-flowers {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-
-  .description {
-    width: 100%;
-  }
-
-  .container-prices {
-    width: 80%;
-    margin-top: 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    border: 1px solid #fff;
-    outline: 1px solid rgb(223, 18, 154);
-    outline-offset: -13px;
-  }
-
-  .container-prices .title {
-    text-align: center;
-    margin-bottom: 10px;
-    letter-spacing: 3px;
-  }
-
-  .container-prices .title-price {
-    text-align: center;
-    margin-top: 13px;
-    font-size: 2.5rem;
-    letter-spacing: 5px;
-  }
-
-  .container-prices .press-on {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .press-on .price-press-on {
-    margin-right: 22.6rem;
-  }
-
-  @media screen (max-width: 100px) {
-    .container-nails-images .gallery {
-      grid-template-columns: repeat(1, 1fr);
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-  }
 
-  @media screen (max-width: 520px) {
-    .container-nails-images .gallery {
-      grid-template-columns: repeat(2, 1fr);
+    .content {
+      width: 100%;
     }
-  }
 
-  @media screen (max-width: 1024px) {
-    .container-nails-images .gallery {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  @media screen and (max-width: 768px) {
     .container-nails-images {
-      width: 70vh;
-      margin-top: 100px;
+      margin-top: 30px;
+    }
+
+    .card-nails-description {
+      background-color: #323232;
+    }
+    .img__description {
+      height: 40vh;
+      width: 100%;
+    }
+
+    .image__banner {
+      height: 90vb;
     }
 
     .container-nails-images .gallery {
+      width: 100%;
+      margin: auto;
+      display: grid;
       grid-template-columns: repeat(3, 1fr);
-    }
-
-    .description {
-      width: 65vh;
+      column-gap: 0.5rem;
+      row-gap: 0.5rem;
     }
 
     .container-prices {
-      width: 75vh;
-      padding-left: 100px;
-      margin-left: 500px;
-      margin-right: 200px;
+      width: 80%;
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 5px;
+      border: 1px solid #fff;
+      outline: 1px solid rgb(223, 18, 154);
+      outline-offset: -13px;
     }
 
     .container-prices .title {
       text-align: center;
-      margin-bottom: 5px;
-      margin-right: 80px;
+      margin-bottom: 10px;
+      letter-spacing: 3px;
     }
+
     .container-prices .title-price {
       text-align: center;
-      margin-top: 10px;
-      margin-right: 80px;
+      margin-top: 13px;
+      font-size: 2.5rem;
+      letter-spacing: 5px;
     }
-    .press-on h3 {
-      width: 200px;
+
+    .container-prices .press-on {
+      display: flex;
+      justify-content: space-between;
     }
 
     .press-on .price-press-on {
-      margin-left: 19.5rem;
+      margin-right: 22.6rem;
     }
-  }
-</style>
+
+    @media screen and (max-width: 768px) {
+      .container-nails-images {
+        width: 70vh;
+        margin-top: 100px;
+      }
+
+      .container-nails-images .gallery {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .description {
+        width: 65vh;
+      }
+
+      .container-prices {
+        width: 75vh;
+        padding-left: 100px;
+        margin-left: 500px;
+        margin-right: 200px;
+      }
+
+      .container-prices .title {
+        text-align: center;
+        margin-bottom: 5px;
+        margin-right: 80px;
+      }
+      .container-prices .title-price {
+        text-align: center;
+        margin-top: 10px;
+        margin-right: 80px;
+      }
+      .press-on h3 {
+        width: 200px;
+      }
+
+      .press-on .price-press-on {
+        margin-left: 19.5rem;
+      }
+    }
+  </style>
+</Layout>

@@ -1,15 +1,7 @@
----
-interface Header {
-  title?: string;
-}
-
-const { title } = Astro.props;
----
-
 <header class="header-container">
   <div class="logo">
     <img src="/images/logo.png" alt="logo" class="image-logo" />
-    <h2 class="header-title">Jessica Diaz {title}</h2>
+    <h2 class="header-title">Jessica Diaz</h2>
   </div>
 
   <nav class="navigation">

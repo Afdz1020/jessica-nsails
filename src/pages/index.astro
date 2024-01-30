@@ -12,9 +12,9 @@ const { semipermanente, acrilico, retoques, tradicional, pressOn } =
   spaServices;
 
 const images = [
-  'images/banner/banner1.jpeg',
-  'images/banner/banner2.jpeg',
-  'images/banner/banner3.jpeg',
+  'images/banner/banner1.webp',
+  'images/banner/banner2.webp',
+  'images/banner/banner3.webp',
 ];
 ---
 
@@ -25,29 +25,30 @@ const images = [
     </section>
 
     <section class="container__nails__services" id="servicios">
+      <h2 class="title__services">Servicios</h2>
       <Card
         title="Semipermanente"
         description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
-        src="images/1.jpg"
+        src="images/1.webp"
       />
 
       <Card
         title="Acrilico"
         description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
-        src="images/2.jpg"
+        src="images/2.webp"
         position="right"
       />
 
       <Card
         title="Retoques"
         description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
-        src="images/3.jpg"
+        src="images/3.webp"
       />
 
       <Card
         title="Press On"
         description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
-        src="images/banner/banner8.jpeg"
+        src="images/banner/banner8.webp"
         position="right"
       />
     </section>
@@ -92,6 +93,7 @@ const images = [
       width: 100px;
       height: 80px;
       color: #fff;
+      background-color: #1b1414;
     }
 
     .banner__nails {
@@ -100,7 +102,11 @@ const images = [
 
     .container__nails__services {
       width: 100%;
-      margin-top: 30px;
+      margin-top: 50px;
+    }
+
+    .container__nails__services .title__services {
+      text-align: center;
     }
 
     .container-prices {

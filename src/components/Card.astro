@@ -3,58 +3,57 @@ interface Props {
   title: string;
   description: string;
   src: string;
-  position?: 'left' | 'right';
 }
 
-const { title, description, src, position = 'left' } = Astro.props;
+const { title, description, src } = Astro.props;
 ---
 
-<div class="card mb-3">
-  {
-    position === 'left' ? (
-      <div class="row g-0">
-        <div class="col-md-4">
-          <img
-            src={src}
-            class="img-fluid rounded-start img__description"
-            alt="Semipermanente"
-          />
-        </div>
-        <div class="col-md-8 card-nails-description">
-          <div class="card-body">
-            <h5 class="card-title">{title}</h5>
-            <p class="card-text">{description}</p>
-          </div>
-        </div>
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src={src} class="rounded-start img__nails" alt="nails">
+    </div>
+    <div class="col-md-8 card-nails-description">
+      <div class="card-body">
+        <h5 class="card-title">{title}</h5>
+        <p class="card-text">{description}</p>
       </div>
-    ) : (
-      <div class="row g-0">
-        <div class="col-md-8 card-nails-description">
-          <div class="card-body">
-            <h5 class="card-title">{title}</h5>
-            <p class="card-text">{description}</p>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <img
-            src={src}
-            class="img-fluid rounded-start img__description"
-            alt="Acrilico"
-          />
-        </div>
-      </div>
-    )
-  }
+    </div>
+  </div>
 </div>
 
+
+
 <style>
-  .card-nails-description {
-    background-color: #323232;
+  .card {
+    border-width: 0;
+    margin-top: 80px;
+    background-color: transparent;
   }
 
-  .img__description {
-    height: 40vh;
-    width: 100%;
+  .card-body {
+    padding: 10px;
+  }
+
+  .img__nails{
+    max-width: 250px;
+    height: 250px;
+  }
+  .card-title {
+    margin-bottom;:10px
+  }
+  .card-nails-description {
+    background-color: #323232;
+    padding: 10px;
+  }
+  @media screen and (max-width: 768px) {
+      .img__nails{
+        max-width: 300px;
+        height: 250px;
+      }
+      .card-nails-description {
+        background-color: #323232;
+        padding: 0
+      }
   }
 </style>

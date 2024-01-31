@@ -1,87 +1,75 @@
-<header class="header-container">
-  <div class="logo">
-    <img src="/images/logo.png" alt="logo" class="image-logo" />
-    <h2 class="header-title">Jessica Diaz</h2>
+<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <div class="container-fluid">
+        <a class="navbar-brand link__root" href="#">
+          <img
+            src="/images/logo.png"
+            alt="Logo"
+            class="d-inline-block align-text-top image-logo"
+          />
+          <p>Jessica Diaz</p>
+        </a>
+      </div>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item item__navigation">
+          <a class="nav-link active" aria-current="page" href="#servicios"
+            >Servicios</a
+          >
+        </li>
+        <li class="nav-item item__navigation">
+          <a class="nav-link" href="#questions">Preguntas Frecuentes</a>
+        </li>
+      </ul>
+    </div>
   </div>
+</nav>
+<style>
+  .navbar-toggler-icon {
+    color: #fff;
+  }
+  .navigation__header {
+    color: #fff;
+  }
 
-  <nav class="navigation">
-    <ul>
-      <li>
-        <a href="/">Inicio</a>
-      </li>
-      <li>
-        <a href="#servicios">Servicios</a>
-      </li>
-    </ul>
-  </nav>
+  .link__root {
+    display: flex;
+    align-items: center;
+  }
 
-  <style>
-    .header-container {
-      display: flex;
-      height: 100px;
-      align-items: center;
-      justify-content: space-between;
-    }
+  .link__root p {
+    margin-top: 10px;
+    color: #fff;
+  }
 
-    .header-container .logo {
-      display: flex;
-      align-items: center;
-    }
+  .item__navigation a {
+    position: relative;
+    text-decoration: none;
+    color: #fff;
+  }
 
-    .header-container .navigation {
-      position: absolute;
-      right: 100px;
-    }
+  .image-logo {
+    margin-left: 2rem;
+    width: 100px;
+    height: 100px;
+  }
 
-    .header-container .navigation ul {
-      display: flex;
-      list-style: none;
-    }
-
-    .navigation ul li {
-      margin-left: 2rem;
-    }
-
-    .navigation ul li a {
-      position: relative;
-      text-decoration: none;
-      color: #fff;
-    }
-
-    .navigation ul li a::before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 2px;
-      border-radius: 4px;
-      background-color: #fff;
-      bottom: 0;
-      left: 0;
-      transform-origin: right;
-      transform: scaleX(0);
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .navigation ul li a:hover::before {
-      transform-origin: left;
-      transform: scaleX(1);
-    }
-
+  @media screen and (max-width: 768px) {
     .image-logo {
-      margin-left: 2rem;
-      width: 100px;
-      height: 100px;
+      width: 60px;
+      height: 60px;
+      margin-left: 0;
     }
-
-    @media screen and (max-width: 768px) {
-      .header-container {
-        width: 100%;
-      }
-
-      .header-container .navigation {
-        position: absolute;
-        left: 350px;
-      }
-    }
-  </style>
-</header>
+  }
+</style>

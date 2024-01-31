@@ -1,15 +1,10 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import Prices from '@/components/Prices.astro';
-import { spaServices } from '@/utils/constants';
 import Carousel from '@/components/Carousel.astro';
 import Card from '@/components/Card.astro';
 import Instagram from '@/components/icons/Instagram.astro';
 import Tiktok from '@/components/icons/Tiktok.astro';
 import Whatsapp from '@/components/icons/Whatsapp.astro';
-
-const { semipermanente, acrilico, retoques, tradicional, pressOn } =
-  spaServices;
 
 const images = [
   'images/banner/banner1.webp',
@@ -26,31 +21,31 @@ const images = [
 
     <section class="container__nails__services" id="servicios">
       <h2 class="title__services">Servicios</h2>
-      <Card
-        title="Semipermanente"
-        description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
-        src="images/1.webp"
-      />
+      <div class="container__services">
+        <Card
+          title="Semipermanente"
+          description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
+          src="images/1.webp"
+        />
 
-      <Card
-        title="Acrilico"
-        description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
-        src="images/2.webp"
-        position="right"
-      />
+        <Card
+          title="Acrilico"
+          description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
+          src="images/2.webp"
+        />
 
-      <Card
-        title="Retoques"
-        description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
-        src="images/3.webp"
-      />
+        <Card
+          title="Retoques"
+          description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
+          src="images/3.webp"
+        />
 
-      <Card
-        title="Press On"
-        description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
-        src="images/banner/banner8.webp"
-        position="right"
-      />
+        <Card
+          title="Press On"
+          description="This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer"
+          src="images/banner/banner8.webp"
+        />
+      </div>
     </section>
 
     <section class="container__social">
@@ -71,6 +66,77 @@ const images = [
       >
         <Whatsapp class="icon__social" />
       </a>
+    </section>
+
+    <section class="container__questions" id="questions">
+      <h2 class="title__services">Preguntas Frecuentes</h2>
+      <ul class="container__warranty">
+        <li
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseWarranty"
+          aria-expanded="false"
+          aria-controls="collapseWarranty"
+          class="card card-body description__questions"
+        >
+          <div>
+            <span class="collapse-icon" aria-hidden="true"></span>
+            Que cubre la garantia
+          </div>
+
+          <div class="collapse" id="collapseWarranty">
+            <div class="content__collapse">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
+              voluptatibus exercitationem in fugiat enim placeat unde, fugit
+              dolorem ab tempora suscipit ut quod accusamus laudantium fuga
+              sequi ipsam maxime officia!
+            </div>
+          </div>
+        </li>
+
+        <li
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseTime"
+          aria-expanded="false"
+          aria-controls="collapseTime"
+          class="card card-body description__questions"
+        >
+          <div>
+            <span class="collapse-icon" aria-hidden="true"></span>
+            Cual es el horario de atencion
+          </div>
+
+          <div class="collapse" id="collapseTime">
+            <div class="content__collapse">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
+              voluptatibus exercitationem in fugiat enim placeat unde, fugit
+              dolorem ab tempora suscipit ut quod accusamus laudantium fuga
+              sequi ipsam maxime officia!
+            </div>
+          </div>
+        </li>
+
+        <li
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseWarantyTime"
+          aria-expanded="false"
+          aria-controls="collapseWarantyTime"
+          class="card card-body description__questions"
+        >
+          <div>
+            <span class="collapse-icon" aria-hidden="true"></span>
+            Cuanto tiempo dura la garantia
+          </div>
+
+          <div class="collapse" id="collapseWarantyTime">
+            <div class="content__collapse">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
+              voluptatibus exercitationem in fugiat enim placeat unde, fugit
+              dolorem ab tempora suscipit ut quod accusamus laudantium fuga
+              sequi ipsam maxime officia!
+            </div>
+          </div>
+        </li>
+      </ul>
     </section>
   </main>
 
@@ -105,26 +171,73 @@ const images = [
       margin-top: 50px;
     }
 
-    .container__nails__services .title__services {
+    .container__services {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-around;
+    }
+
+    .title__services {
       text-align: center;
     }
 
-    .container-prices {
-      width: 80%;
-      margin-top: 60px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 5px;
-      border: 1px solid #fff;
-      outline: 1px solid rgb(223, 18, 154);
-      outline-offset: -13px;
+    .container__questions {
+      margin-top: 50px;
+      width: 100%;
+    }
+
+    .container__questions .container__warranty {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    .container__questions .container__warranty li {
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .content__collapse {
+      border-top: 1px solid #fff;
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+
+    .description__questions {
+      background-color: #323232;
+    }
+
+    /* 
+    \002B -> +
+    \2212 -> -
+     */
+
+    .collapse-icon {
+      content: '\002B';
+    }
+
+    .collapse-icon::before {
+      content: '\002B';
+    }
+
+    /* .collapse:not(.collapsed) .collapse-icon {
+      content: '\002B';
+    } */
+
+    .collapsed .collapse-icon::before {
+      content: '\2212';
     }
 
     @media screen and (max-width: 768px) {
-      .press-on .price-press-on {
-        margin-left: 19.5rem;
+      .container__nails__services {
+        width: 100%;
+        margin-top: 0;
+      }
+
+      .container__questions {
+        margin-top: 50px;
+        width: 100%;
       }
     }
   </style>

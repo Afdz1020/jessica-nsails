@@ -136,6 +136,28 @@ const images = [
             </div>
           </div>
         </li>
+
+        <li
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseWarantyTime"
+          aria-expanded="false"
+          aria-controls="collapseWarantyTime"
+          class="card card-body description__questions"
+        >
+          <div>
+            <span class="collapse-icon" aria-hidden="true"></span>
+            Que cubre la garantia
+          </div>
+
+          <div class="collapse" id="collapseWarantyTime">
+            <div class="content__collapse">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
+              voluptatibus exercitationem in fugiat enim placeat unde, fugit
+              dolorem ab tempora suscipit ut quod accusamus laudantium fuga
+              sequi ipsam maxime officia!
+            </div>
+          </div>
+        </li>
       </ul>
     </section>
   </main>
@@ -220,10 +242,6 @@ const images = [
     .collapse-icon::before {
       content: '\002B';
     }
-
-    /* .collapse:not(.collapsed) .collapse-icon {
-      content: '\002B';
-    } */
 
     .collapsed .collapse-icon::before {
       content: '\2212';

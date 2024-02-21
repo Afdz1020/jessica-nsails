@@ -1,9 +1,9 @@
 ---
-import Menu from '@/components/icons/Menu.astro';
+import Menu from './icons/Menu.astro';
 ---
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-  <div class="container-fluid">
+  <div class="container">
     <button
       class="navbar-toggler"
       type="button"
@@ -17,7 +17,7 @@ import Menu from '@/components/icons/Menu.astro';
       <!-- <span class="navbar-toggler-icon navigation__header"></span> -->
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <div class="container-fluid">
+      <div class="container">
         <a class="navbar-brand link__root" href="#">
           <img
             src="/images/logo.png"
@@ -27,20 +27,28 @@ import Menu from '@/components/icons/Menu.astro';
           <p>Jessica Diaz</p>
         </a>
       </div>
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav mb-4 mb-lg-0">
         <li class="nav-item item__navigation">
           <a class="nav-link active" aria-current="page" href="#servicios"
             >Servicios</a
           >
         </li>
         <li class="nav-item item__navigation">
-          <a class="nav-link" href="#questions">Preguntas Frecuentes</a>
+          <a class="nav-link" href="#questions">Preguntas</a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 <style>
+  .navbar {
+    position: sticky;
+    z-index: 10;
+    border-bottom-color: #1b1414;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    margin-bottom: 20px;
+  }
   .navbar-toggler-icon {
     color: #fff;
   }

@@ -2,6 +2,7 @@
 import Header from '@/components/Header.astro';
 import '@fontsource-variable/nunito';
 import { ViewTransitions } from 'astro:transitions';
+import Footer from '@/components/Footer.astro';
 interface Props {
   title: string;
 }
@@ -9,7 +10,7 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -34,11 +35,7 @@ const { title } = Astro.props;
     <ViewTransitions />
     <slot />
 
-    <footer class="app-footer">
-      <p>321-225-7761</p>
-      <p>Calle 32a # 45-01</p>
-      <p>San Pio - Itagui</p>
-    </footer>
+    <Footer />
   </body>
 </html>
 
@@ -52,18 +49,5 @@ const { title } = Astro.props;
     font-family: 'Nunito Variable', sans-serif;
     background: #323232;
     color: #fff;
-  }
-
-  .app-footer {
-    width: 70%;
-    margin-left: 5rem;
-    display: flex;
-    flex-direction: column;
-    margin-top: 120px;
-  }
-
-  .app-footer p {
-    font-size: 1.5rem;
-    margin-top: -10px;
   }
 </style>

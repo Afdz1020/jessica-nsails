@@ -2,9 +2,6 @@
 import Layout from '@/layouts/Layout.astro';
 import Carousel from '@/components/Carousel.astro';
 import Card from '@/components/Card.astro';
-import Instagram from '@/components/icons/Instagram.astro';
-import Tiktok from '@/components/icons/Tiktok.astro';
-import Whatsapp from '@/components/icons/Whatsapp.astro';
 
 const images = [
   'images/banner/banner1.webp',
@@ -46,26 +43,6 @@ const images = [
           src="images/banner/banner8.webp"
         />
       </div>
-    </section>
-
-    <section class="container__social">
-      <a href="https://www.instagram.com/jessicadiaz_nailsart/" target="_blank">
-        <Instagram class="icon__social" />
-      </a>
-
-      <a
-        href="https://www.tiktok.com/@jessicadiazzapata8?lang=es"
-        target="_blank"
-      >
-        <Tiktok class="icon__social" />
-      </a>
-
-      <a
-        href="https://api.whatsapp.com/send?phone=+573212257761&text=Bienvenido%20a%20Jessica%20Diaz%20Nails%20Spa,%20¿en%20qué%20te%20podemos%20ayudar?"
-        target="_blank"
-      >
-        <Whatsapp class="icon__social" />
-      </a>
     </section>
 
     <section class="container__questions" id="questions">
@@ -256,6 +233,11 @@ const images = [
       .container__questions {
         margin-top: 50px;
         width: 100%;
+      }
+
+      .container__social {
+        display: flex;
+        justify-content: center;
       }
     }
   </style>

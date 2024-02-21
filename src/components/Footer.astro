@@ -1,0 +1,107 @@
+---
+import Instagram from './icons/Instagram.astro';
+import Tiktok from './icons/Tiktok.astro';
+import Whatsapp from './icons/Whatsapp.astro';
+---
+
+<footer class="app-footer">
+  <section class="information">
+    <a class="navbar-brand link__root" href="#">
+      <img
+        src="/images/logo.png"
+        alt="Logo"
+        class="d-inline-block align-text-top image-logo"
+      />
+    </a>
+    <p class="description__footer">321-225-7761</p>
+    <p class="description__footer">Calle 32a # 45-01</p>
+    <p class="description__footer">San Pio - Itagui</p>
+  </section>
+
+  <section class="container__social">
+    <!-- <a href="https://www.instagram.com/jessicadiaz_nailsart/" target="_blank"> -->
+    <Instagram class="icon__social" />
+    <!-- </a> -->
+
+    <!-- <a
+      href="https://www.tiktok.com/@jessicadiazzapata8?lang=es"
+      target="_blank"
+    > -->
+    <Tiktok class="icon__social" />
+    <!-- </a> -->
+
+    <!-- <a
+      href="https://api.whatsapp.com/send?phone=+573212257761&text=Bienvenido%20a%20Jessica%20Diaz%20Nails%20Spa,%20¿en%20qué%20te%20podemos%20ayudar?"
+      target="_blank"
+    > -->
+    <Whatsapp class="icon__social" />
+    <!-- </a> -->
+  </section>
+</footer>
+
+<style>
+  .app-footer {
+    padding-left: 30px;
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 30px;
+    background-color: #1b1414;
+  }
+
+  .app-footer .information {
+    display: flex;
+    align-items: center;
+  }
+
+  .description__footer {
+    padding-left: 10px;
+  }
+
+  .app-footer section {
+    width: 50%;
+  }
+
+  .app-footer p {
+    font-size: 1rem;
+    margin-top: -10px;
+  }
+  .container__social {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 30px;
+  }
+
+  .icon__social {
+    width: 50px;
+    height: 80px;
+    color: #fff;
+    margin-left: 80px;
+  }
+
+  .image-logo {
+    margin-left: 2rem;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 30px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .app-footer .information {
+      flex-direction: column;
+    }
+    .container__social {
+      width: 50%;
+      border-radius: 10px;
+    }
+
+    .icon__social {
+      color: #fff;
+      margin-left: 20px;
+    }
+
+    /* .container__social {
+      display: flex;
+      justify-content: center;
+    } */
+  }
+</style>

@@ -1,0 +1,90 @@
+<section id="nosotros" data-sec class="section dark">
+	<div class="container grid">
+		<div data-reveal="0" class="photo placeholder">foto de Jessica en el spa</div>
+		<div class="copy">
+			<p data-reveal="1" class="eyebrow">Nuestra historia</p>
+			<h2 data-reveal="2" class="title">Un espacio para <em>consentirte</em>, sin afán.</h2>
+			<p data-reveal="3" class="body">
+				En JessicaDiaznails cada cita es personal. Trabajamos con productos de calidad, herramientas
+				esterilizadas y el tiempo necesario para que tus uñas luzcan impecables por semanas.
+			</p>
+			<div data-reveal="4" class="pillars">
+				<div>
+					<span class="pillar-title">Higiene</span>
+					<span class="pillar-desc">Kits esterilizados por clienta</span>
+				</div>
+				<div>
+					<span class="pillar-title">Diseño</span>
+					<span class="pillar-desc">Nail art a mano alzada</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	section {
+		background: var(--ink);
+		color: #f7edeb;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+		gap: clamp(40px, 6vw, 96px);
+		align-items: center;
+	}
+
+	.photo {
+		aspect-ratio: 4 / 5;
+		border-radius: 240px 240px 8px 8px;
+		background: repeating-linear-gradient(135deg, #5a5555 0 12px, #555050 12px 24px);
+		color: #c9b5b3;
+		letter-spacing: 0.08em;
+	}
+
+	.copy {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+	}
+
+	.title {
+		line-height: 1.08;
+	}
+
+	.body {
+		margin: 0;
+		font-size: 16px;
+		line-height: 1.8;
+		font-weight: 300;
+		max-width: 500px;
+		color: #e6dad8;
+		text-wrap: pretty;
+	}
+
+	.pillars {
+		display: flex;
+		gap: 40px;
+		flex-wrap: wrap;
+		padding-top: 12px;
+		border-top: 1px solid rgba(227, 183, 178, 0.25);
+	}
+
+	.pillars > div {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.pillar-title {
+		font-family: var(--serif);
+		font-size: 22px;
+		color: var(--rose-light);
+	}
+
+	.pillar-desc {
+		font-size: 13px;
+		color: #cfc2c0;
+	}
+</style>

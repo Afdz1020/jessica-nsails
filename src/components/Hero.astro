@@ -1,0 +1,92 @@
+---
+import Logo from './Logo.astro';
+import Wordmark from './Wordmark.astro';
+---
+
+<section id="inicio" data-sec class="section hero">
+	<div class="inner">
+		<div data-reveal="0" class="logo-wrap">
+			<Logo size="100%" zoom={6} alt="Logo JessicaDiaznails" />
+		</div>
+		<p data-reveal="1" class="eyebrow">Nail Spa · Colombia</p>
+		<h1 data-reveal="2"><Wordmark /></h1>
+		<p data-reveal="3" class="lead">Manos y pies cuidados con calma, detalle y diseños hechos a tu medida.</p>
+		<div data-reveal="4" class="actions">
+			<a href="#agendar" class="btn btn-solid">Agenda tu cita</a>
+			<a href="#servicios" class="btn btn-ghost">Ver servicios</a>
+		</div>
+	</div>
+	<a href="#nosotros" class="scroll-hint">Desliza ↓</a>
+</section>
+
+<style>
+	.hero {
+		position: relative;
+		padding-inline: 24px;
+		background: radial-gradient(ellipse at 50% 40%, var(--blush-2) 0%, var(--cream) 65%);
+	}
+
+	.inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 28px;
+		max-width: 760px;
+	}
+
+	.logo-wrap {
+		width: clamp(180px, 26vw, 280px);
+		border-radius: 50%;
+		box-shadow: 0 30px 60px -30px rgba(154, 91, 92, 0.45);
+	}
+
+	h1 {
+		margin: 0;
+		font-family: var(--serif);
+		font-weight: 400;
+		font-size: clamp(44px, 7vw, 88px);
+		line-height: 1;
+		letter-spacing: -0.01em;
+	}
+
+	.lead {
+		margin: 0;
+		font-size: 17px;
+		line-height: 1.7;
+		font-weight: 300;
+		max-width: 460px;
+		text-wrap: pretty;
+	}
+
+	.actions {
+		display: flex;
+		gap: 14px;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.scroll-hint {
+		position: absolute;
+		bottom: 28px;
+		left: 50%;
+		transform: translateX(-50%);
+		font-size: 11px;
+		letter-spacing: 0.3em;
+		text-transform: uppercase;
+		color: var(--rose);
+		opacity: 0.8;
+		animation: nudge 2.4s ease-in-out infinite;
+	}
+
+	@keyframes nudge {
+		0%, 100% { translate: 0 0; }
+		50% { translate: 0 6px; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.scroll-hint {
+			animation: none;
+		}
+	}
+</style>

@@ -1,0 +1,99 @@
+---
+import { services } from '../data/site';
+---
+
+<section id="servicios" data-sec class="section">
+	<div class="container stack">
+		<div class="head">
+			<div class="head-titles">
+				<p data-reveal="0" class="eyebrow">Servicios</p>
+				<h2 data-reveal="1" class="title">Menú de <em>cuidado</em></h2>
+			</div>
+			<p data-reveal="2" class="note">Precios en pesos colombianos. El valor final puede variar según el diseño.</p>
+		</div>
+		<ul class="menu">
+			{
+				services.map((s, i) => (
+					<li data-reveal={String(i % 3)}>
+						<div class="info">
+							<span class="name">{s.name}</span>
+							<span class="desc">{s.desc}</span>
+						</div>
+						<span class="price">{s.price}</span>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</section>
+
+<style>
+	.stack {
+		display: flex;
+		flex-direction: column;
+		gap: 48px;
+	}
+
+	.head {
+		display: flex;
+		justify-content: space-between;
+		align-items: end;
+		gap: 24px;
+		flex-wrap: wrap;
+	}
+
+	.head-titles {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	.note {
+		margin: 0;
+		font-size: 14px;
+		color: var(--muted);
+		max-width: 300px;
+		line-height: 1.7;
+	}
+
+	.menu {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+		column-gap: 64px;
+	}
+
+	li {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 20px;
+		padding: 24px 0;
+		border-bottom: 1px solid rgba(154, 91, 92, 0.2);
+	}
+
+	.info {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+
+	.name {
+		font-family: var(--serif);
+		font-size: 26px;
+	}
+
+	.desc {
+		font-size: 14px;
+		color: var(--muted);
+		font-weight: 300;
+	}
+
+	.price {
+		font-size: 15px;
+		color: var(--rose);
+		white-space: nowrap;
+	}
+</style>

@@ -1,53 +1,47 @@
 ---
-import Header from '@/components/Header.astro';
-import '@fontsource-variable/nunito';
-import { ViewTransitions } from 'astro:transitions';
-import Footer from '@/components/Footer.astro';
+import '../styles/global.css';
+import { settings } from '../data/site';
+
 interface Props {
-  title: string;
+	title?: string;
+	description?: string;
 }
 
-const { title } = Astro.props;
+const {
+	title = 'JessicaDiaznails · Nail Spa en Colombia',
+	description = 'Manos y pies cuidados con calma, detalle y diseños hechos a tu medida. Agenda tu cita en JessicaDiaznails.',
+} = Astro.props;
+
+const hidden = {
+	Subir: 'translateY(48px)',
+	Desvanecer: 'none',
+	Zoom: 'scale(0.94)',
+}[settings.revealStyle];
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Spa de uñas" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/png" href="/images/logo-m.png" />
-    <meta name="generator" content={Astro.generator} />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-      crossorigin="anonymous"></script>
-    <title>{title}</title>
-  </head>
-  <body>
-    <Header />
-    <ViewTransitions />
-    <slot />
-
-    <Footer />
-  </body>
+<html lang="es" class:list={{ snap: settings.scrollSnap }} style={`--reveal-hidden: ${hidden}`}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="description" content={description} />
+		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" type="image/png" href="/favicon-32.png" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<title>{title}</title>
+		<script is:inline>document.documentElement.classList.add('js');</script>
+	</head>
+	<body>
+		<slot />
+		<script>
+			import { initScroll } from '../scripts/scroll';
+			initScroll();
+		</script>
+	</body>
 </html>
-
-<style is:global>
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    font-family: 'Nunito Variable', sans-serif;
-    background: #323232;
-    color: #fff;
-  }
-</style>

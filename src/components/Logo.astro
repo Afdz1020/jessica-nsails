@@ -1,0 +1,34 @@
+---
+// Logo circular. El PNG trae un margen blanco, por eso se amplía un poco y se recorta.
+interface Props {
+	size: string;
+	alt?: string;
+	zoom?: number;
+	class?: string;
+}
+
+const { size, alt = 'JD', zoom = 8, class: className } = Astro.props;
+---
+
+<span class:list={['logo', className]} style={`--size: ${size}; --zoom: ${zoom}`}>
+	<img src="/assets/logo-jd.png" alt={alt} />
+</span>
+
+<style>
+	.logo {
+		width: var(--size);
+		aspect-ratio: 1;
+		border-radius: 50%;
+		overflow: hidden;
+		display: block;
+		flex: none;
+		background: var(--blush);
+	}
+
+	img {
+		width: calc(100% + var(--zoom) * 1%);
+		height: calc(100% + var(--zoom) * 1%);
+		margin: calc(var(--zoom) * -0.5%);
+		object-fit: cover;
+	}
+</style>

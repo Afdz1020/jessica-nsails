@@ -1,0 +1,59 @@
+---
+import { sections } from '../data/site';
+---
+
+<nav class="dots" aria-label="Secciones">
+	{
+		sections.map((s, i) => (
+			<a
+				href={`#${s.id}`}
+				data-dot={s.id}
+				title={s.label}
+				aria-label={s.label}
+				class:list={{ 'is-active': i === 0 }}
+			/>
+		))
+	}
+</nav>
+
+<style>
+	.dots {
+		position: fixed;
+		right: clamp(12px, 2vw, 28px);
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	a {
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		border: 1px solid var(--rose);
+		background: transparent;
+		transition: background 0.3s, transform 0.3s;
+	}
+
+	a:hover {
+		transform: scale(1.3);
+	}
+
+	a.is-active {
+		background: var(--rose);
+	}
+
+	@media (max-width: 560px) {
+		.dots {
+			right: 8px;
+			gap: 12px;
+		}
+
+		a {
+			width: 8px;
+			height: 8px;
+		}
+	}
+</style>

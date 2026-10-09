@@ -1,0 +1,177 @@
+:root {
+	--cream: #fbf6f4;
+	--blush: #f5e7e4;
+	--blush-2: #f7e6e3;
+	--rose: #9a5b5c;
+	--rose-light: #e3b7b2;
+	--ink: #4a4646;
+	--muted: #7a7070;
+	--line: #e6d6d3;
+	--error: #b0483f;
+	--serif: 'Cormorant Garamond', serif;
+	--sans: 'Jost', sans-serif;
+	--gutter: clamp(24px, 6vw, 96px);
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: 0;
+	background: var(--cream);
+}
+
+html.snap {
+	scroll-snap-type: y mandatory;
+}
+
+body {
+	margin: 0;
+	font-family: var(--sans);
+	color: var(--ink);
+	background: var(--cream);
+	overflow-x: hidden;
+}
+
+a {
+	color: var(--rose);
+	text-decoration: none;
+	transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+
+a:hover {
+	color: var(--ink);
+}
+
+input,
+select,
+textarea,
+button {
+	font-family: var(--sans);
+}
+
+img {
+	display: block;
+}
+
+/* Secciones a pantalla completa */
+.section {
+	min-height: 100vh;
+	min-height: 100svh;
+	scroll-snap-align: start;
+	display: grid;
+	place-items: center;
+	padding: 120px var(--gutter) 80px;
+}
+
+.container {
+	max-width: 1180px;
+	width: 100%;
+}
+
+/* Tipografía compartida */
+.eyebrow {
+	margin: 0;
+	font-size: 12px;
+	letter-spacing: 0.32em;
+	text-transform: uppercase;
+	color: var(--rose);
+}
+
+.title {
+	margin: 0;
+	font-family: var(--serif);
+	font-weight: 400;
+	font-size: clamp(36px, 4.6vw, 60px);
+	line-height: 1.05;
+	text-wrap: pretty;
+}
+
+.title em,
+.wordmark em {
+	font-style: italic;
+	color: var(--rose);
+}
+
+/* Secciones oscuras */
+.dark .title em,
+.dark .wordmark em {
+	color: var(--rose-light);
+}
+
+.dark .eyebrow {
+	color: var(--rose-light);
+}
+
+/* Botones tipo píldora */
+.btn {
+	display: inline-block;
+	padding: 16px 32px;
+	border-radius: 999px;
+	font-size: 13px;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.btn-solid {
+	background: var(--rose);
+	color: var(--cream);
+	border: none;
+}
+
+.btn-solid:hover {
+	background: var(--ink);
+	color: var(--cream);
+}
+
+.btn-ghost {
+	border: 1px solid rgba(74, 70, 70, 0.3);
+	color: var(--ink);
+}
+
+.btn-ghost:hover {
+	border-color: var(--rose);
+	color: var(--rose);
+}
+
+/* Placeholders de foto */
+.placeholder {
+	display: grid;
+	place-items: center;
+	text-align: center;
+	padding: 16px;
+	font-family: ui-monospace, monospace;
+	font-size: 12px;
+	letter-spacing: 0.06em;
+}
+
+/* Animación de aparición: solo se oculta si el JS está activo */
+.js [data-reveal] {
+	opacity: 0;
+	transform: var(--reveal-hidden, translateY(48px));
+	transition:
+		opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0s),
+		transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0s);
+}
+
+.js [data-reveal].is-visible {
+	opacity: 1;
+	transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	.js [data-reveal] {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}

@@ -1,0 +1,67 @@
+---
+import { contact, gallery } from '../data/site';
+---
+
+<section id="galeria" data-sec class="section">
+	<div class="container stack">
+		<div class="head">
+			<div class="head-titles">
+				<p data-reveal="0" class="eyebrow">Galería</p>
+				<h2 data-reveal="1" class="title">Trabajos <em>recientes</em></h2>
+			</div>
+			<a data-reveal="2" class="ig" href={`https://instagram.com/${contact.instagram}`} target="_blank" rel="noopener">
+				Más en Instagram →
+			</a>
+		</div>
+		<div class="grid">
+			{gallery.map((label, i) => <div data-reveal={String(i)} class="tile placeholder">{label}</div>)}
+		</div>
+	</div>
+</section>
+
+<style>
+	section {
+		background: var(--blush);
+	}
+
+	.stack {
+		display: flex;
+		flex-direction: column;
+		gap: 40px;
+	}
+
+	.head {
+		display: flex;
+		justify-content: space-between;
+		align-items: end;
+		gap: 24px;
+		flex-wrap: wrap;
+	}
+
+	.head-titles {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	.ig {
+		font-size: 13px;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		border-bottom: 1px solid currentColor;
+		padding-bottom: 4px;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+		gap: 16px;
+	}
+
+	.tile {
+		aspect-ratio: 3 / 4;
+		border-radius: 6px;
+		background: repeating-linear-gradient(135deg, #efd8d4 0 12px, #ead0cc 12px 24px);
+		color: var(--rose);
+	}
+</style>

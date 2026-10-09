@@ -1,107 +1,107 @@
 ---
-import Instagram from './icons/Instagram.astro';
-import Tiktok from './icons/Tiktok.astro';
-import Whatsapp from './icons/Whatsapp.astro';
+import { contact } from '../data/site';
+import Logo from './Logo.astro';
+import Wordmark from './Wordmark.astro';
 ---
 
-<footer class="app-footer">
-  <section class="information">
-    <a class="navbar-brand link__root" href="#">
-      <img
-        src="/images/logo.png"
-        alt="Logo"
-        class="d-inline-block align-text-top image-logo"
-      />
-    </a>
-    <p class="description__footer">321-225-7761</p>
-    <p class="description__footer">Calle 32a # 45-01</p>
-    <p class="description__footer">San Pio - Itagui</p>
-  </section>
-
-  <section class="container__social">
-    <!-- <a href="https://www.instagram.com/jessicadiaz_nailsart/" target="_blank"> -->
-    <Instagram class="icon__social" />
-    <!-- </a> -->
-
-    <!-- <a
-      href="https://www.tiktok.com/@jessicadiazzapata8?lang=es"
-      target="_blank"
-    > -->
-    <Tiktok class="icon__social" />
-    <!-- </a> -->
-
-    <!-- <a
-      href="https://api.whatsapp.com/send?phone=+573212257761&text=Bienvenido%20a%20Jessica%20Diaz%20Nails%20Spa,%20¿en%20qué%20te%20podemos%20ayudar?"
-      target="_blank"
-    > -->
-    <Whatsapp class="icon__social" />
-    <!-- </a> -->
-  </section>
+<footer id="contacto" data-sec class="dark">
+	<div class="cols">
+		<div data-reveal="0" class="col brand">
+			<Logo size="72px" />
+			<Wordmark class="brand-name" />
+		</div>
+		<div data-reveal="1" class="col">
+			<span class="eyebrow">Contacto</span>
+			<a href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noopener">WhatsApp {contact.whatsappLabel}</a>
+			<a href={`mailto:${contact.email}`}>{contact.email}</a>
+			<a href={`https://instagram.com/${contact.instagram}`} target="_blank" rel="noopener">@{contact.instagram}</a>
+		</div>
+		<div data-reveal="2" class="col">
+			<span class="eyebrow">Visítanos</span>
+			{contact.address.map((line) => <span>{line}</span>)}
+		</div>
+		<div data-reveal="3" class="col">
+			<span class="eyebrow">Horario</span>
+			{contact.hours.map((line) => <span>{line}</span>)}
+		</div>
+	</div>
+	<div class="bottom">
+		<span>© {new Date().getFullYear()} JessicaDiaznails. Todos los derechos reservados.</span>
+		<a href="#inicio">Volver arriba ↑</a>
+	</div>
 </footer>
 
 <style>
-  .app-footer {
-    padding-left: 30px;
-    display: flex;
-    justify-content: space-evenly;
-    padding-top: 30px;
-    background-color: #1b1414;
-  }
+	footer {
+		min-height: 70vh;
+		scroll-snap-align: end;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 56px;
+		padding: 88px var(--gutter) 32px;
+		background: var(--ink);
+		color: #f7edeb;
+	}
 
-  .app-footer .information {
-    display: flex;
-    align-items: center;
-  }
+	.cols,
+	.bottom {
+		max-width: 1180px;
+		width: 100%;
+		margin: 0 auto;
+	}
 
-  .description__footer {
-    padding-left: 10px;
-  }
+	.cols {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+		gap: 48px;
+	}
 
-  .app-footer section {
-    width: 50%;
-  }
+	.col {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		font-size: 15px;
+		font-weight: 300;
+	}
 
-  .app-footer p {
-    font-size: 1rem;
-    margin-top: -10px;
-  }
-  .container__social {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 30px;
-  }
+	.brand {
+		gap: 18px;
+	}
 
-  .icon__social {
-    width: 50px;
-    height: 80px;
-    color: #fff;
-    margin-left: 80px;
-  }
+	.brand :global(.brand-name) {
+		font-family: var(--serif);
+		font-size: 28px;
+		font-weight: 400;
+	}
 
-  .image-logo {
-    margin-left: 2rem;
-    width: 100px;
-    height: 100px;
-    margin-bottom: 30px;
-  }
+	.eyebrow {
+		letter-spacing: 0.28em;
+		margin-bottom: 6px;
+	}
 
-  @media screen and (max-width: 768px) {
-    .app-footer .information {
-      flex-direction: column;
-    }
-    .container__social {
-      width: 50%;
-      border-radius: 10px;
-    }
+	.col a {
+		color: #f7edeb;
+	}
 
-    .icon__social {
-      color: #fff;
-      margin-left: 20px;
-    }
+	.col a:hover,
+	.bottom a:hover {
+		color: var(--rose-light);
+	}
 
-    /* .container__social {
-      display: flex;
-      justify-content: center;
-    } */
-  }
+	.bottom {
+		display: flex;
+		justify-content: space-between;
+		gap: 16px;
+		flex-wrap: wrap;
+		padding-top: 24px;
+		border-top: 1px solid rgba(227, 183, 178, 0.2);
+		font-size: 12px;
+		color: #bfb1af;
+		letter-spacing: 0.06em;
+	}
+
+	.bottom a {
+		color: #bfb1af;
+	}
 </style>

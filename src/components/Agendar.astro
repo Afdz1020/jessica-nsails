@@ -65,6 +65,13 @@ import { formatDuration } from '../lib/booking';
 						<input name="website" tabindex="-1" autocomplete="off" />
 					</label>
 				</div>
+				<p class="notice" role="note">
+					<span class="notice-mark" aria-hidden="true">%</span>
+					<span>
+						Debes pagar el 50% de tu servicio para poder aceptar tu servicio.
+						<strong>Medios de pago: Nequi o Bancolombia.</strong>
+					</span>
+				</p>
 				<button type="submit" class="btn btn-solid submit">Solicitar cita</button>
 				<p class="error" role="alert" hidden></p>
 			</form>
@@ -479,6 +486,44 @@ import { formatDuration } from '../lib/booking';
 		width: 1px;
 		height: 1px;
 		overflow: hidden;
+	}
+
+	/* Aviso del anticipo: mismo lenguaje que las tarjetas de servicio (borde fino, esquinas redondeadas). */
+	.notice {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		margin: 8px 0 0;
+		padding: 14px 16px;
+		border: 1px solid var(--rose-light);
+		border-radius: 12px;
+		background: var(--blush);
+		color: var(--ink);
+		font-size: 14px;
+		line-height: 1.5;
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.notice strong {
+		display: block;
+		margin-top: 2px;
+		font-weight: 500;
+		color: var(--rose);
+	}
+
+	.notice-mark {
+		flex: none;
+		width: 28px;
+		height: 28px;
+		border-radius: 50%;
+		background: #fff;
+		color: var(--rose);
+		display: grid;
+		place-items: center;
+		font-family: var(--serif);
+		font-size: 16px;
+		line-height: 1;
 	}
 
 	.submit:disabled {

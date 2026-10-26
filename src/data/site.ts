@@ -49,6 +49,21 @@ export const services = [
   },
 ];
 
+/** Reglas del agendamiento online. */
+export const booking = {
+	openTime: '09:00',
+	lastStartTime: '17:00',
+	stepMin: 30,
+	minLeadHours: 3,
+	maxDaysAhead: 30,
+	bufferMin: 0,
+	/** Días cerrados (0 = domingo). */
+	closedWeekdays: [0],
+	utcOffset: '-05:00',
+};
+
+export type BookingConfig = typeof booking;
+
 export const gallery = [
   'foto · semipermanente nude',
   'foto · nail art floral',

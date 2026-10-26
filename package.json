@@ -9,9 +9,17 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest run"
   },
   "dependencies": {
-    "astro": "^7.3.8"
+    "@googleapis/calendar": "^20.1.0",
+    "@netlify/blobs": "^10.7.13",
+    "astro": "^7.3.8",
+    "nodemailer": "^10.2.1"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^8.0.2",
+    "vitest": "^5.0.5"
   }
 }

@@ -5,10 +5,13 @@ import { settings } from '../data/site';
 interface Props {
 	title?: string;
 	description?: string;
+	// Páginas internas (p. ej. /aprobar) desactivan el snap y el script de scroll del home.
+	snap?: boolean;
 }
 
 const {
 	title = 'JessicaDiaznails · Nail Spa en Colombia',
+	snap = true,
 	description = 'Manos y pies cuidados con calma, detalle y diseños hechos a tu medida. Agenda tu cita en JessicaDiaznails.',
 } = Astro.props;
 
@@ -19,7 +22,7 @@ const hidden = {
 }[settings.revealStyle];
 ---
 
-<html lang="es" class:list={{ snap: settings.scrollSnap }} style={`--reveal-hidden: ${hidden}`}>
+<html lang="es" class:list={{ snap: snap && settings.scrollSnap }} style={`--reveal-hidden: ${hidden}`}>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -35,6 +38,7 @@ const hidden = {
 			rel="stylesheet"
 		/>
 		<title>{title}</title>
+		<slot name="head" />
 		<script is:inline>document.documentElement.classList.add('js');</script>
 	</head>
 	<body>

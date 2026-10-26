@@ -1,0 +1,284 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Logo from '../components/Logo.astro';
+import Wordmark from '../components/Wordmark.astro';
+---
+
+<Layout title="Aprobar cita · JessicaDiaznails" snap={false}>
+	<meta slot="head" name="robots" content="noindex, nofollow" />
+	<main class="page">
+		<div class="brand">
+			<Logo size="56px" />
+			<Wordmark />
+		</div>
+
+		<section class="card" aria-labelledby="aprobar-title">
+			<p class="eyebrow">Solicitud de cita</p>
+			<h1 id="aprobar-title" class="title">Revisar solicitud</h1>
+
+			<p id="msg" class="msg" role="status" aria-live="polite">Cargando solicitud…</p>
+
+			<dl id="details" class="details" hidden>
+				<div><dt>Clienta</dt><dd id="d-name"></dd></div>
+				<div><dt>Servicios</dt><dd id="d-services"></dd></div>
+				<div><dt>Fecha</dt><dd id="d-date"></dd></div>
+				<div><dt>Hora</dt><dd id="d-time"></dd></div>
+				<div><dt>Duración</dt><dd id="d-duration"></dd></div>
+			</dl>
+
+			<p id="status" class="status" hidden></p>
+
+			<div id="actions" class="actions" hidden>
+				<button type="button" id="approve" class="btn btn-solid">Aprobar</button>
+				<button type="button" id="reject" class="btn btn-ghost">Rechazar</button>
+			</div>
+
+			<p id="result" class="result" role="status" aria-live="polite"></p>
+		</section>
+	</main>
+</Layout>
+
+<script>
+	import { formatDuration } from '../lib/booking';
+
+	type Status = 'pending' | 'approved' | 'rejected' | 'expired';
+	interface PublicRequest {
+		name: string;
+		services: string[];
+		date: string;
+		time: string;
+		durationMin: number;
+		status: Status;
+	}
+
+	const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+	const msg = $('msg');
+	const details = $('details');
+	const statusEl = $('status');
+	const actions = $('actions');
+	const result = $('result');
+	const approveBtn = $<HTMLButtonElement>('approve');
+	const rejectBtn = $<HTMLButtonElement>('reject');
+
+	const id = new URLSearchParams(location.search).get('id')?.trim() ?? '';
+	const STATUS_TEXT: Record<Status, string> = {
+		pending: 'Pendiente',
+		approved: 'Aprobada',
+		rejected: 'Rechazada',
+		expired: 'Venció',
+	};
+
+	function notFound() {
+		details.hidden = true;
+		actions.hidden = true;
+		statusEl.hidden = true;
+		msg.hidden = false;
+		msg.textContent = 'Solicitud no encontrada';
+	}
+
+	function longDate(date: string): string {
+		return new Date(`${date}T12:00:00-05:00`).toLocaleDateString('es-CO', {
+			weekday: 'long',
+			day: 'numeric',
+			month: 'long',
+			timeZone: 'America/Bogota',
+		});
+	}
+
+	function longTime(time: string): string {
+		const [h, m] = time.split(':').map(Number);
+		const h12 = h % 12 === 0 ? 12 : h % 12;
+		return `${h12}:${String(m).padStart(2, '0')} ${h < 12 ? 'a.m.' : 'p.m.'}`;
+	}
+
+	// Todo valor de la clienta entra solo con textContent.
+	function render(r: PublicRequest) {
+		msg.hidden = true;
+		$('d-name').textContent = r.name;
+		$('d-services').textContent = r.services.join(', ');
+		$('d-date').textContent = longDate(r.date);
+		$('d-time').textContent = longTime(r.time);
+		$('d-duration').textContent = formatDuration(r.durationMin);
+		details.hidden = false;
+
+		const pending = r.status === 'pending';
+		actions.hidden = !pending;
+		statusEl.hidden = pending;
+		statusEl.textContent = STATUS_TEXT[r.status] ?? '';
+	}
+
+	async function load(): Promise<boolean> {
+		try {
+			const res = await fetch(`/api/decision?id=${encodeURIComponent(id)}`);
+			if (res.status === 404 || res.status === 400) {
+				notFound();
+				return false;
+			}
+			if (!res.ok) throw new Error(String(res.status));
+			render((await res.json()).request);
+			return true;
+		} catch {
+			msg.hidden = false;
+			msg.textContent = 'No pudimos cargar la solicitud. Intenta de nuevo.';
+			return false;
+		}
+	}
+
+	async function decide(action: 'approve' | 'reject') {
+		approveBtn.disabled = rejectBtn.disabled = true;
+		result.textContent = '';
+		try {
+			const res = await fetch('/api/decision', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ id, action }),
+			});
+			if (res.ok) {
+				const { request } = await res.json();
+				render(request);
+				result.textContent =
+					request.status === 'approved'
+						? 'Cita aprobada ✓ — se creó en tu calendario y avisamos a la clienta por correo.'
+						: 'Solicitud rechazada — avisamos a la clienta por correo.';
+				return;
+			}
+			if (res.status === 409) {
+				const data = await res.json().catch(() => ({}));
+				await load();
+				// Si el re-fetch falló o sigue pendiente, los botones siguen visibles: se reactivan.
+				if (!actions.hidden) approveBtn.disabled = rejectBtn.disabled = false;
+				result.textContent = data.error || 'La solicitud ya no se puede modificar.';
+				return;
+			}
+			throw new Error(String(res.status));
+		} catch {
+			result.textContent = 'No pudimos completar la acción. Intenta de nuevo.';
+			approveBtn.disabled = rejectBtn.disabled = false;
+		}
+	}
+
+	approveBtn.addEventListener('click', () => decide('approve'));
+	rejectBtn.addEventListener('click', () => decide('reject'));
+
+	if (!id) notFound();
+	else load();
+</script>
+
+<style>
+	.page {
+		min-height: 100svh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 28px;
+		padding: 32px var(--gutter);
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		font-family: var(--serif);
+		font-size: 26px;
+	}
+
+	.card {
+		width: 100%;
+		max-width: 520px;
+		background: #fff;
+		border: 1px solid rgba(154, 91, 92, 0.18);
+		border-radius: 24px;
+		padding: clamp(24px, 4vw, 40px);
+		box-shadow: 0 40px 80px -50px rgba(154, 91, 92, 0.4);
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+
+	.title {
+		font-size: clamp(32px, 6vw, 44px);
+	}
+
+	.msg,
+	.result {
+		margin: 0;
+		font-size: 15px;
+		line-height: 1.6;
+		color: var(--muted);
+	}
+
+	.result:empty {
+		display: none;
+	}
+
+	.result {
+		color: var(--ink);
+		font-weight: 500;
+	}
+
+	.details {
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.details div {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding-bottom: 12px;
+		border-bottom: 1px solid var(--line);
+	}
+
+	dt {
+		font-size: 12px;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: var(--rose);
+	}
+
+	dd {
+		margin: 0;
+		font-size: 17px;
+		text-transform: none;
+		overflow-wrap: anywhere;
+	}
+
+	#d-date::first-letter {
+		text-transform: uppercase;
+	}
+
+	.status {
+		margin: 0;
+		font-family: var(--serif);
+		font-size: 28px;
+		color: var(--rose);
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+
+	.actions .btn {
+		flex: 1 1 140px;
+		text-align: center;
+		background-color: transparent;
+	}
+
+	.actions .btn-solid {
+		background-color: var(--rose);
+	}
+
+	.actions .btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	[hidden] {
+		display: none !important;
+	}
+</style>

@@ -1,5 +1,6 @@
 ---
-import { ampm, services, times } from '../data/site';
+import { services } from '../data/site';
+import { formatDuration } from '../lib/booking';
 ---
 
 <section id="agendar" data-sec class="section">
@@ -8,7 +9,7 @@ import { ampm, services, times } from '../data/site';
 			<p data-reveal="0" class="eyebrow">Agenda tu cita</p>
 			<h2 data-reveal="1" class="title">Reserva tu <em>momento</em></h2>
 			<p data-reveal="2" class="lead">
-				Elige el servicio, la fecha y la hora. Te confirmamos por WhatsApp en el transcurso del día.
+				Elige tus servicios, la fecha y la hora. Jessica revisa tu solicitud y te responde por correo en el transcurso del día.
 			</p>
 			<div data-reveal="3" class="hours">
 				<span>Lunes a sábado · 9:00 a.m. – 7:00 p.m.</span>
@@ -29,31 +30,41 @@ import { ampm, services, times } from '../data/site';
 					</label>
 				</div>
 				<label>
-					Servicio
-					<select required name="service">
-						<option value="">Selecciona un servicio</option>
-						{services.map((s) => <option value={s.name}>{s.name} · {s.price}</option>)}
-					</select>
+					Correo
+					<input required name="email" type="email" autocomplete="email" inputmode="email" placeholder="tu@correo.com" />
 				</label>
+				<fieldset>
+					<legend>Servicios</legend>
+					<div class="services">
+						{
+							services.map((s) => (
+								<label class="svc">
+									<input type="checkbox" name="services" value={s.name} />
+									<span class="svc-name">{s.name}</span>
+									<span class="svc-meta">
+										{s.price} · {formatDuration(s.duration)}
+									</span>
+								</label>
+							))
+						}
+					</div>
+					<p class="total" aria-live="polite"></p>
+				</fieldset>
 				<label>
 					Fecha
 					<input required name="date" type="date" />
 				</label>
 				<fieldset>
 					<legend>Hora</legend>
-					<div class="slots">
-						{
-							times.map((t) => (
-								<label class="slot">
-									<input type="radio" name="time" value={t} />
-									<span>
-										{t} {ampm(t)}
-									</span>
-								</label>
-							))
-						}
-					</div>
+					<p class="slots-status" aria-live="polite">Elige un servicio y una fecha para ver los horarios</p>
+					<div class="slots"></div>
 				</fieldset>
+				<div class="trap" aria-hidden="true">
+					<label>
+						Sitio web
+						<input name="website" tabindex="-1" autocomplete="off" />
+					</label>
+				</div>
 				<button type="submit" class="btn btn-solid submit">Solicitar cita</button>
 				<p class="error" role="alert" hidden></p>
 			</form>
@@ -62,7 +73,6 @@ import { ampm, services, times } from '../data/site';
 				<span class="check" aria-hidden="true">✓</span>
 				<h3>¡Gracias, <span data-out="name"></span>!</h3>
 				<p data-out="summary"></p>
-				<a data-out="wa" class="btn btn-solid" target="_blank" rel="noopener">Confirmar por WhatsApp</a>
 				<button type="button" class="again">Agendar otra cita</button>
 			</div>
 		</div>
@@ -70,17 +80,29 @@ import { ampm, services, times } from '../data/site';
 </section>
 
 <script>
-	import { ampm, contact, services } from '../data/site';
+	import { booking } from '../data/site';
+	import { formatDuration, totalDuration } from '../lib/booking';
 
 	const form = document.querySelector<HTMLFormElement>('#booking')!;
 	const card = form.parentElement!;
 	const done = card.querySelector<HTMLElement>('.done')!;
 	const error = form.querySelector<HTMLElement>('.error')!;
+	const submitBtn = form.querySelector<HTMLButtonElement>('.submit')!;
+	const totalOut = form.querySelector<HTMLElement>('.total')!;
+	const slotsStatus = form.querySelector<HTMLElement>('.slots-status')!;
+	const slotsBox = form.querySelector<HTMLElement>('.slots')!;
 	const dateInput = form.elements.namedItem('date') as HTMLInputElement;
 
-	// No se pueden pedir citas en fechas pasadas.
-	const d = new Date();
-	dateInput.min = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+	const GENERIC_ERROR = 'No pudimos enviar tu solicitud. Intenta de nuevo en unos minutos.';
+	const IDLE = 'Elige un servicio y una fecha para ver los horarios';
+
+	// Fecha de hoy en Colombia (UTC−5), sin depender de la zona del navegador.
+	const colombiaToday = () => new Date(Date.now() - 5 * 3600_000);
+	const addDays = (d: Date, n: number) => new Date(d.getTime() + n * 86_400_000);
+	const isoDay = (d: Date) => d.toISOString().slice(0, 10);
+
+	dateInput.min = isoDay(colombiaToday());
+	dateInput.max = isoDay(addDays(colombiaToday(), booking.maxDaysAhead));
 
 	const showError = (msg: string) => {
 		error.textContent = msg;
@@ -88,41 +110,153 @@ import { ampm, services, times } from '../data/site';
 	};
 
 	const formatDate = (iso: string) =>
-		new Date(`${iso}T12:00:00`).toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' });
+		new Date(`${iso}T12:00:00Z`).toLocaleDateString('es-CO', {
+			weekday: 'long',
+			day: 'numeric',
+			month: 'long',
+			timeZone: 'UTC',
+		});
+
+	// '15:30' -> '3:30 p.m.'
+	const formatTime = (hhmm: string) => {
+		const [h, m] = hhmm.split(':').map(Number);
+		const h12 = h % 12 === 0 ? 12 : h % 12;
+		return `${h12}:${String(m).padStart(2, '0')} ${h < 12 ? 'a.m.' : 'p.m.'}`;
+	};
+
+	const isClosedDay = (iso: string) => booking.closedWeekdays.includes(new Date(`${iso}T12:00:00Z`).getUTCDay());
+
+	const selectedServices = () =>
+		Array.from(form.querySelectorAll<HTMLInputElement>('input[name="services"]:checked')).map((i) => i.value);
+
+	const updateTotal = () => {
+		const total = totalDuration(selectedServices());
+		totalOut.textContent = total ? `Duración total: ${formatDuration(total)}` : '';
+	};
+
+	// Horarios: solo la consulta más reciente puede pintar (token incremental).
+	let loadToken = 0;
+
+	const setStatus = (msg: string) => {
+		slotsStatus.textContent = msg;
+		slotsStatus.hidden = !msg;
+	};
+
+	const renderSlots = (slots: string[]) => {
+		slotsBox.replaceChildren(
+			...slots.map((t) => {
+				const label = document.createElement('label');
+				label.className = 'slot';
+				const input = document.createElement('input');
+				input.type = 'radio';
+				input.name = 'time';
+				input.value = t;
+				const span = document.createElement('span');
+				span.textContent = formatTime(t);
+				label.append(input, span);
+				return label;
+			}),
+		);
+	};
+
+	const loadSlots = async () => {
+		const token = ++loadToken;
+		const names = selectedServices();
+		const date = dateInput.value;
+		renderSlots([]); // limpia la hora elegida
+		if (names.length === 0 || !date) return setStatus(IDLE);
+		if (isClosedDay(date)) return setStatus('Los domingos no se agenda desde esta página');
+		if (!dateInput.validity.valid) return setStatus('Elige una fecha dentro de los próximos días.');
+
+		setStatus('Cargando horarios…');
+		try {
+			const qs = new URLSearchParams({ date, services: names.join(',') });
+			const res = await fetch(`/api/availability?${qs}`);
+			if (token !== loadToken) return;
+			if (!res.ok) throw new Error(String(res.status));
+			const body = (await res.json()) as { slots?: string[] };
+			if (token !== loadToken) return;
+			const slots = Array.isArray(body.slots) ? body.slots : [];
+			renderSlots(slots);
+			setStatus(slots.length ? '' : 'No hay horarios disponibles ese día');
+		} catch {
+			if (token !== loadToken) return;
+			setStatus('No pudimos cargar los horarios. Intenta de nuevo.');
+		}
+	};
 
 	form.addEventListener('input', () => showError(''));
+	form.addEventListener('change', (e) => {
+		const t = e.target as HTMLInputElement;
+		if (t.name === 'services') updateTotal();
+		if (t.name === 'services' || t.name === 'date') loadSlots();
+	});
 
-	form.addEventListener('submit', (e) => {
+	let sending = false;
+
+	form.addEventListener('submit', async (e) => {
 		e.preventDefault();
-		const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+		if (sending) return;
+		const fd = new FormData(form);
+		const str = (k: string) => String(fd.get(k) ?? '').trim();
+		const names = selectedServices();
 
-		const firstInvalid = form.querySelector<HTMLInputElement | HTMLSelectElement>(':invalid');
+		const firstInvalid = form.querySelector<HTMLInputElement>(':invalid');
 		if (firstInvalid) {
-			showError('Completa nombre, celular, servicio y fecha.');
+			showError('Completa nombre, celular, correo válido y fecha.');
 			firstInvalid.focus();
 			return;
 		}
-		if (!data.time) return showError('Selecciona una hora para tu cita.');
+		if (names.length === 0) return showError('Selecciona al menos un servicio.');
+		const time = str('time');
+		if (!time) return showError('Selecciona una hora para tu cita.');
 
-		const svc = services.find((s) => s.name === data.service);
-		const when = `${formatDate(data.date)} a las ${data.time} ${ampm(data.time)}`;
-		const msg =
-			`Hola Jessica, soy ${data.name}. Quiero agendar ${data.service}` +
-			`${svc ? ` (${svc.price})` : ''} el ${when}. Mi celular: ${data.phone}`;
+		const payload = {
+			name: str('name'),
+			phone: str('phone'),
+			email: str('email'),
+			services: names,
+			date: str('date'),
+			time,
+			website: str('website'),
+		};
 
-		done.querySelector('[data-out="name"]')!.textContent = data.name;
-		done.querySelector('[data-out="summary"]')!.textContent =
-			`Recibimos tu solicitud: ${data.service} el ${when}. Confírmala por WhatsApp para asegurar tu espacio.`;
-		done.querySelector<HTMLAnchorElement>('[data-out="wa"]')!.href =
-			`https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(msg)}`;
-
-		form.hidden = true;
-		done.hidden = false;
+		sending = true;
+		submitBtn.disabled = true;
+		showError('');
+		try {
+			const res = await fetch('/api/request', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(payload),
+			});
+			if (res.status === 201) {
+				done.querySelector('[data-out="name"]')!.textContent = payload.name;
+				done.querySelector('[data-out="summary"]')!.textContent =
+					`Recibimos tu solicitud de ${names.join(', ')} para el ${formatDate(payload.date)} a las ${formatTime(time)}. ` +
+					`Jessica la revisará y te responderemos por correo a ${payload.email}.`;
+				form.hidden = true;
+				done.hidden = false;
+				return;
+			}
+			const body = (await res.json().catch(() => null)) as { error?: string } | null;
+			showError(body?.error || GENERIC_ERROR);
+			if (res.status === 409) loadSlots();
+		} catch {
+			showError(GENERIC_ERROR);
+		} finally {
+			sending = false;
+			submitBtn.disabled = false;
+		}
 	});
 
 	done.querySelector('.again')!.addEventListener('click', () => {
 		form.reset();
 		showError('');
+		updateTotal();
+		loadToken++;
+		renderSlots([]);
+		setStatus(IDLE);
 		done.hidden = true;
 		form.hidden = false;
 	});
@@ -238,20 +372,20 @@ import { ampm, services, times } from '../data/site';
 		gap: 8px;
 	}
 
-	.slot {
+	.slots :global(.slot) {
 		display: block;
 		letter-spacing: 0;
 		text-transform: none;
 	}
 
-	.slot input {
+	.slots :global(.slot input) {
 		position: absolute;
 		opacity: 0;
 		width: 1px;
 		height: 1px;
 	}
 
-	.slot span {
+	.slots :global(.slot span) {
 		display: block;
 		padding: 10px 14px;
 		border-radius: 999px;
@@ -263,19 +397,93 @@ import { ampm, services, times } from '../data/site';
 		transition: all 0.2s;
 	}
 
-	.slot span:hover {
+	.slots :global(.slot span:hover) {
 		border-color: var(--rose);
 	}
 
-	.slot input:checked + span {
+	.slots :global(.slot input:checked + span) {
 		background: var(--rose);
 		border-color: var(--rose);
 		color: var(--cream);
 	}
 
-	.slot input:focus-visible + span {
+	.slots :global(.slot input:focus-visible + span) {
 		outline: 2px solid var(--rose);
 		outline-offset: 2px;
+	}
+
+	.services {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.svc {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+		gap: 12px;
+		padding: 12px 16px;
+		border: 1px solid var(--line);
+		border-radius: 12px;
+		background: var(--cream);
+		color: var(--ink);
+		font-size: 14px;
+		letter-spacing: 0;
+		text-transform: none;
+		cursor: pointer;
+		transition: border-color 0.2s;
+	}
+
+	.svc:hover,
+	.svc:has(input:checked) {
+		border-color: var(--rose);
+	}
+
+	.svc:has(input:focus-visible) {
+		outline: 2px solid var(--rose);
+		outline-offset: 2px;
+	}
+
+	.svc input {
+		width: 18px;
+		height: 18px;
+		padding: 0;
+		accent-color: var(--rose);
+	}
+
+	.svc-meta {
+		color: var(--muted);
+		font-size: 13px;
+		text-align: right;
+	}
+
+	.total,
+	.slots-status {
+		margin: 0;
+		font-size: 13px;
+		color: var(--muted);
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.total:empty,
+	.slots-status[hidden] {
+		display: none;
+	}
+
+	/* Campo trampa: fuera de pantalla (no solo display:none) para que los bots lo llenen. */
+	.trap {
+		position: absolute;
+		left: -10000px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+
+	.submit:disabled {
+		opacity: 0.6;
+		cursor: wait;
 	}
 
 	.submit {

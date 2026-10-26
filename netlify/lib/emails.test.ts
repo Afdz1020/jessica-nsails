@@ -49,6 +49,15 @@ describe('emailForClient', () => {
 		expect(m.text).toContain('otro horario');
 		expect(m.subject).not.toMatch(/[\r\n]/);
 	});
+	it.each(['approved', 'rejected', 'expired'] as const)(
+		'%s no filtra el id ni el enlace de aprobación',
+		(o) => {
+			const secreto = 'TOKEN-secreto-123';
+			const m = emailForClient({ ...req, id: secreto }, o);
+			expect(m.text + m.subject).not.toContain(secreto);
+			expect(m.text + m.subject).not.toContain('aprobar');
+		},
+	);
 	it('mediodía y medianoche', () => {
 		expect(emailForClient({ ...req, time: '12:30' }, 'approved').text).toContain('12:30 p.m.');
 		expect(emailForClient({ ...req, time: '00:05' }, 'approved').text).toContain('12:05 a.m.');

@@ -14,6 +14,9 @@ export type ParseResult = { ok: true; value: ParsedInput } | { ok: false; error:
 const MAX = 100;
 const MIN_DIGITOS = 7;
 
+// Una sola @, sin espacios ni , ; < > " (evita varios destinatarios), y un punto en el dominio
+const CORREO = /^[^\s@,;<>"]+@[^\s@,;<>".]+(\.[^\s@,;<>".]+)+$/;
+
 const fail = (error: string): ParseResult => ({ ok: false, error });
 
 // Devuelve el texto recortado, o null si no es string
@@ -53,7 +56,7 @@ export function parseRequestInput(raw: unknown): ParseResult {
 	const email = texto(r.email);
 	if (!email) return fail('Escribe tu correo.');
 	if (email.length > MAX) return fail('El correo es demasiado largo (máximo 100 caracteres).');
-	if (!/^[^\s@]+@[^\s@]+$/.test(email)) return fail('El correo no es válido.');
+	if (!CORREO.test(email)) return fail('El correo no es válido.');
 
 	if (!Array.isArray(r.services) || r.services.length === 0) {
 		return fail('Elige al menos un servicio.');

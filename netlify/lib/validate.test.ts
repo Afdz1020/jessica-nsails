@@ -36,6 +36,24 @@ describe('parseRequestInput', () => {
 	it('falla con nombre de más de 100 caracteres', () => falla({ ...valido, name: 'a'.repeat(101) }));
 	it('falla con celular de menos de 7 dígitos', () => falla({ ...valido, phone: '12-34 5' }));
 	it('falla con correo sin @', () => falla({ ...valido, email: 'ana.correo.com' }));
+	it('falla con correo sin punto en el dominio (antes se aceptaba a@b)', () => {
+		falla({ ...valido, email: 'a@b' });
+		falla({ ...valido, email: 'a@b.' });
+		falla({ ...valido, email: 'a@.b' });
+	});
+	it('falla con más de una @', () => falla({ ...valido, email: 'a@b@c.co' }));
+	it.each(['ana @correo.com', 'ana@cor\treo.com', 'ana,x@correo.com', 'ana;x@correo.com', 'ana<x@correo.com', 'ana>x@correo.com', 'ana"x@correo.com'])(
+		'falla con espacio o caracter prohibido: %s',
+		(email) => falla({ ...valido, email }),
+	);
+	it('falla con correo de más de 100 caracteres', () => {
+		falla({ ...valido, email: `${'a'.repeat(96)}@b.co` });
+	});
+	it('acepta correos normales', () => {
+		for (const email of ['a@b.co', 'ana.perez+citas@correo.com.co', `${'a'.repeat(94)}@b.co`]) {
+			expect(parseRequestInput({ ...valido, email }).ok).toBe(true);
+		}
+	});
 	it('falla con services vacío', () => falla({ ...valido, services: [] }));
 	it('falla con servicio desconocido', () => falla({ ...valido, services: ['Inexistente'] }));
 	it('falla si services no son strings', () => falla({ ...valido, services: [1] }));

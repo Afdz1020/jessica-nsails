@@ -6,7 +6,6 @@ import type { BookingRequest, Deps, RequestStatus } from './types';
 import { parseRequestInput } from './validate';
 
 const DAY = 86_400_000;
-const MAX_PENDIENTES = 3;
 
 type Fail<S> = { ok: false; status: S; error: string };
 
@@ -17,6 +16,7 @@ const MENSAJE_ESTADO: Record<Exclude<RequestStatus, 'pending'>, string> = {
 };
 
 const digitos = (s: string) => s.replace(/\D/g, '');
+const correoNormal = (s: string) => s.trim().toLowerCase();
 
 const vencida = (r: BookingRequest, now: Date) =>
 	new Date(r.expiresAt).getTime() <= now.getTime();
@@ -38,12 +38,20 @@ async function enviar(d: Deps, to: string, m: { subject: string; text: string },
 	}
 }
 
-// Marca la solicitud como vencida y avisa a la clienta (una sola vez: la transición)
-async function vencer(d: Deps, r: BookingRequest): Promise<BookingRequest> {
-	const actualizada: BookingRequest = { ...r, status: 'expired' };
+// Marca la solicitud como vencida y avisa a la clienta (una sola vez: la transición).
+// Se vuelve a leer justo antes de guardar: si otro proceso (el cron o una página abierta) ya la
+// cerró, no se guarda ni se envía nada. Esto achica la ventana de carrera pero no la elimina,
+// porque Netlify Blobs no tiene transacciones.
+async function vencer(
+	d: Deps,
+	r: BookingRequest,
+): Promise<{ request: BookingRequest; vencio: boolean }> {
+	const actual = await d.store.get(r.id);
+	if (!actual || actual.status !== 'pending') return { request: actual ?? r, vencio: false };
+	const actualizada: BookingRequest = { ...actual, status: 'expired' };
 	await d.store.put(actualizada);
-	await enviar(d, r.email, emailForClient(actualizada, 'expired'), r.id);
-	return actualizada;
+	await enviar(d, actualizada.email, emailForClient(actualizada, 'expired'), actualizada.id);
+	return { request: actualizada, vencio: true };
 }
 
 // Cierra la solicitud como rechazada y avisa a la clienta
@@ -91,14 +99,26 @@ export async function createRequest(
 		return { ok: false, status: 409, error: 'Ese horario se acaba de ocupar. Elige otro, por favor.' };
 	}
 
+	// Límites contra abuso: en total, por celular (solo dígitos) y por correo (sin mayúsculas)
 	const now = d.now();
-	const tel = digitos(v.phone);
-	const delMismoCelular = (await pendientesVigentes(d, now)).filter((r) => digitos(r.phone) === tel);
-	if (delMismoCelular.length >= MAX_PENDIENTES) {
+	const pendientes = await pendientesVigentes(d, now);
+	if (pendientes.length >= booking.maxPendingTotal) {
 		return {
 			ok: false,
 			status: 429,
-			error: 'Ya tienes 3 solicitudes en espera. Espera la respuesta antes de pedir otra.',
+			error: 'Hay muchas solicitudes en espera. Intenta de nuevo en un rato.',
+		};
+	}
+	const tel = digitos(v.phone);
+	const correo = correoNormal(v.email);
+	const max = booking.maxPendingPerContact;
+	const delMismoCelular = pendientes.filter((r) => digitos(r.phone) === tel).length;
+	const delMismoCorreo = pendientes.filter((r) => correoNormal(r.email) === correo).length;
+	if (delMismoCelular >= max || delMismoCorreo >= max) {
+		return {
+			ok: false,
+			status: 429,
+			error: `Ya tienes ${max} solicitudes en espera. Espera la respuesta antes de pedir otra.`,
 		};
 	}
 
@@ -120,7 +140,7 @@ export async function createRequest(
 export async function getRequest(d: Deps, id: string): Promise<BookingRequest | null> {
 	const r = await d.store.get(id);
 	if (!r) return null;
-	if (r.status === 'pending' && vencida(r, d.now())) return vencer(d, r);
+	if (r.status === 'pending' && vencida(r, d.now())) return (await vencer(d, r)).request;
 	return r;
 }
 
@@ -182,8 +202,7 @@ export async function expireDue(d: Deps): Promise<number> {
 	let n = 0;
 	for (const r of await d.store.listPending()) {
 		if (!vencida(r, now)) continue;
-		await vencer(d, r);
-		n++;
+		if ((await vencer(d, r)).vencio) n++;
 	}
 	return n;
 }

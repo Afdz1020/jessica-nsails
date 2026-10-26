@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { availableSlots, createRequest, decide, expireDue, getRequest } from './requests';
 import { fakeDeps } from './testing';
 import { expiryDeadline } from '../../src/lib/expiry';
+import { booking } from '../../src/data/site';
+import type { BookingRequest } from './types';
 
 // Lunes 26 de octubre, 10:00 a.m. en Bogotá
 const NOW = new Date('2026-10-26T15:00:00.000Z');
@@ -65,6 +67,54 @@ describe('createRequest', () => {
 		const r = await createRequest(f.deps, input({ time: '15:00' }));
 		expect(r).toMatchObject({ ok: false, status: 429 });
 		expect(f.store.data.size).toBe(3);
+	});
+
+	it('cuarta solicitud pendiente del mismo correo → 429, sin importar mayúsculas', async () => {
+		await crear({ time: '09:00', phone: '311 000 0001' });
+		await crear({ time: '11:00', phone: '311 000 0002', email: 'ANA@Correo.com' });
+		await crear({ time: '13:00', phone: '311 000 0003', email: ' Ana@correo.COM ' });
+		const r = await createRequest(f.deps, input({ time: '15:00', phone: '311 000 0004' }));
+		expect(r).toMatchObject({ ok: false, status: 429 });
+		expect(f.store.data.size).toBe(3);
+	});
+
+	it('las vencidas no cuentan para el límite por correo', async () => {
+		const id = await crear({ time: '09:00', phone: '311 000 0001' });
+		await crear({ time: '11:00', phone: '311 000 0002' });
+		await crear({ time: '13:00', phone: '311 000 0003' });
+		f.setNow(new Date(new Date((await f.store.get(id))!.expiresAt).getTime() + 1));
+		const r = await createRequest(f.deps, input({ date: '2026-10-29', time: '15:00', phone: '311 000 0004' }));
+		expect(r.ok).toBe(true);
+	});
+
+	it('límite global de pendientes vigentes → 429 con mensaje en español', async () => {
+		expect(booking.maxPendingTotal).toBe(30);
+		// Pendientes de otras clientas en otra fecha, para no ocupar el horario pedido
+		const base = (await f.store.get(await crear({ date: '2026-11-05', time: '09:00' })))!;
+		for (let i = 1; i < booking.maxPendingTotal; i++) {
+			const otra: BookingRequest = { ...base, id: `x-${i}`, phone: `31100${String(i).padStart(5, '0')}`, email: `c${i}@correo.com` };
+			await f.store.put(otra);
+		}
+		const r = await createRequest(f.deps, input({ phone: '322 999 9999', email: 'nueva@correo.com' }));
+		expect(r).toEqual({
+			ok: false,
+			status: 429,
+			error: 'Hay muchas solicitudes en espera. Intenta de nuevo en un rato.',
+		});
+		expect(f.store.data.size).toBe(booking.maxPendingTotal);
+	});
+
+	it('con una menos del límite global sí se acepta', async () => {
+		const base = (await f.store.get(await crear({ date: '2026-11-05', time: '09:00' })))!;
+		for (let i = 1; i < booking.maxPendingTotal - 1; i++) {
+			await f.store.put({ ...base, id: `x-${i}`, phone: `31100${String(i).padStart(5, '0')}`, email: `c${i}@correo.com` });
+		}
+		const r = await createRequest(f.deps, input({ phone: '322 999 9999', email: 'nueva@correo.com' }));
+		expect(r.ok).toBe(true);
+	});
+
+	it('el límite por contacto sale de booking.maxPendingPerContact', () => {
+		expect(booking.maxPendingPerContact).toBe(3);
 	});
 
 	it('entrada inválida → 400 y no guarda nada', async () => {
@@ -215,6 +265,55 @@ describe('getRequest', () => {
 		// La clienta recibe el aviso una sola vez: expireDue ya no la ve pendiente
 		const avisos = () => f.mailer.sent.filter((m) => m.to === 'ana@correo.com').length;
 		expect(avisos()).toBe(1);
+		expect(await expireDue(f.deps)).toBe(0);
+		expect(avisos()).toBe(1);
+	});
+});
+
+describe('vencimiento concurrente', () => {
+	// Simula la carrera: alguien leyó la solicitud pendiente justo antes de que el cron la venciera
+	const conLecturaVieja = (vieja: BookingRequest) => {
+		const get = f.store.get.bind(f.store);
+		let primera = true;
+		f.store.get = async (id: string) => {
+			if (primera && id === vieja.id) {
+				primera = false;
+				return structuredClone(vieja);
+			}
+			return get(id);
+		};
+	};
+	const avisos = () => f.mailer.sent.filter((m) => m.to === 'ana@correo.com').length;
+
+	it('getRequest con lectura vieja no envía un segundo correo de vencida', async () => {
+		const id = await crear();
+		const vieja = (await f.store.get(id))!;
+		f.setNow(new Date(new Date(vieja.expiresAt).getTime() + 1));
+		expect(await expireDue(f.deps)).toBe(1);
+		expect(avisos()).toBe(1);
+		conLecturaVieja(vieja);
+		expect((await getRequest(f.deps, id))?.status).toBe('expired');
+		expect(avisos()).toBe(1);
+	});
+
+	it('decide con lectura vieja no envía un segundo correo de vencida', async () => {
+		const id = await crear();
+		const vieja = (await f.store.get(id))!;
+		f.setNow(new Date(new Date(vieja.expiresAt).getTime() + 1));
+		await expireDue(f.deps);
+		conLecturaVieja(vieja);
+		expect(await decide(f.deps, id, 'approve')).toMatchObject({ ok: false, status: 409 });
+		expect(avisos()).toBe(1);
+		expect(f.calendar.created).toHaveLength(0);
+	});
+
+	it('expireDue con listado viejo no reenvía ni cuenta la ya vencida', async () => {
+		const id = await crear();
+		const vieja = (await f.store.get(id))!;
+		f.setNow(new Date(new Date(vieja.expiresAt).getTime() + 1));
+		await getRequest(f.deps, id);
+		expect(avisos()).toBe(1);
+		f.store.listPending = async () => [structuredClone(vieja)];
 		expect(await expireDue(f.deps)).toBe(0);
 		expect(avisos()).toBe(1);
 	});

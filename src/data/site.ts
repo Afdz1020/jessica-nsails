@@ -66,6 +66,10 @@ export const booking = {
   /** Días cerrados (0 = domingo). */
   closedWeekdays: [0],
   utcOffset: '-05:00',
+  /** Máximo de solicitudes en espera (sin vencer) en total. */
+  maxPendingTotal: 30,
+  /** Máximo de solicitudes en espera por celular y por correo. */
+  maxPendingPerContact: 3,
 };
 
 export type BookingConfig = typeof booking;
@@ -85,10 +89,3 @@ export const sections = [
   { id: 'agendar', label: 'Agendar' },
   { id: 'contacto', label: 'Contacto' },
 ];
-
-export const times = ['9:00', '10:30', '12:00', '1:30', '3:00', '4:30', '6:00'];
-
-export const ampm = (t: string) => {
-  const h = parseInt(t);
-  return h >= 9 && h < 12 ? 'a.m.' : 'p.m.';
-};
